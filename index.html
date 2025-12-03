@@ -17,12 +17,12 @@
       --total-largura: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
       --face-padding: 4px;
       --face-gap: 4px;
-      --codigo-font-size: 15px;
+      --codigo-font-size: 19px;
       --codigo-letter-spacing: 0.25px;
-      --linha-font-size: 13px;
+      --linha-font-size: 11px;
       --linha-gap: 6px;
-      --fornecedor-font-size: 12px;
-      --barcode-height: 32px;
+      --fornecedor-font-size: 11px;
+      --barcode-height: 19px;
       --face-offset: 0px;
     }
 
@@ -265,6 +265,8 @@
 
     .face.verso {
       background: #fff;
+      align-items: center;
+      justify-content: center;
     }
 
     .codigo-maior {
@@ -273,6 +275,7 @@
       font-weight: 700;
       color: #0f172a;
       line-height: 1.1;
+      text-align: center;
     }
 
     .linha-inferior {
@@ -308,6 +311,10 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .placeholder {
@@ -489,7 +496,7 @@
 
         <fieldset>
           <legend>Verso</legend>
-          <label for="fornecedor">Fornecedor</label>
+          <label for="fornecedor">Informações e Fornecedor</label>
           <input type="text" id="fornecedor" name="fornecedor" autocomplete="off" placeholder="Digite o fornecedor" />
           <p class="help">O código de barras (CODE128) será gerado a partir do código informado na frente.</p>
         </fieldset>
@@ -654,9 +661,18 @@
     }
 
     function formatarPeso(valor) {
-      const peso = valor.trim();
+      const peso = valor.trim().replace(',', '.');
       if (!peso) return '';
-      return /g$/i.test(peso) ? peso : `${peso}g`;
+
+      const numero = Number.parseFloat(peso);
+      if (Number.isNaN(numero)) return '';
+
+      const valorFormatado = numero.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
+      return `${valorFormatado}g`;
     }
 
     function alturaCodigoBarras() {
@@ -742,16 +758,7 @@
       const lojaSpan = document.createElement('span');
       lojaSpan.textContent = lojas;
       const detalhes = [pesoSpan, lojaSpan].filter((el) => el.textContent);
-      detalhes.forEach((el, index) => {
-        linhaInferior.appendChild(el);
-        if (index === 0 && detalhes.length > 1) {
-          const separador = document.createElement('span');
-          separador.textContent = '|';
-          separador.style.opacity = '0.7';
-          separador.style.fontWeight = '600';
-          linhaInferior.appendChild(separador);
-        }
-      });
+      detalhes.forEach((el) => linhaInferior.appendChild(el));
 
       frente.appendChild(codigoFrente);
       frente.appendChild(linhaInferior);
@@ -867,9 +874,11 @@
           border-right: 1px dashed #e2e8f0;
         }
 
-        .face.verso {
-          background: #fff;
-        }
+    .face.verso {
+      background: #fff;
+      align-items: center;
+      justify-content: center;
+    }
 
         .codigo-maior {
           font-size: var(--codigo-font-size);
@@ -877,6 +886,7 @@
           font-weight: 700;
           color: #0f172a;
           line-height: 1.1;
+          text-align: center;
         }
 
         .linha-inferior {
@@ -905,14 +915,18 @@
           height: var(--barcode-height);
         }
 
-        .fornecedor {
-          font-size: var(--fornecedor-font-size);
-          color: #0f172a;
-          font-weight: 600;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+    .fornecedor {
+      font-size: var(--fornecedor-font-size);
+      color: #0f172a;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
         @page {
           size: 9.98cm 1.2cm;
