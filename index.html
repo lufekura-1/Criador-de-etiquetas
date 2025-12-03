@@ -14,6 +14,7 @@
       --verso: 3cm;
       --rabicho: 3.5cm;
       --margin-fim: 0.2cm;
+      --total-largura: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
     }
 
     * {
@@ -193,23 +194,29 @@
 
     .label-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: var(--margin-inicio) var(--frente) var(--verso) var(--rabicho) var(--margin-fim);
       align-items: stretch;
       background: #fff;
       border-radius: 8px;
       overflow: hidden;
-      width: 12cm;
+      width: var(--total-largura);
       height: var(--label-height);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
       border: 1px solid #e2e8f0;
     }
 
+    .espaco {
+      background: #f1f5f9;
+    }
+
     .face {
-      padding: 6px 10px;
+      padding: 4px 6px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 4px;
+      height: 100%;
+      overflow: hidden;
     }
 
     .face.frente {
@@ -222,17 +229,18 @@
     }
 
     .codigo-maior {
-      font-size: 1.05rem;
-      letter-spacing: 0.4px;
+      font-size: 0.95rem;
+      letter-spacing: 0.25px;
       font-weight: 700;
       color: #0f172a;
+      line-height: 1.1;
     }
 
     .linha-inferior {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
+      gap: 6px;
+      font-size: 0.8rem;
       color: #0f172a;
       font-weight: 600;
       white-space: nowrap;
@@ -246,15 +254,16 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      height: 100%;
     }
 
     .barcode-wrapper svg {
       width: 100%;
-      height: 44px;
+      height: 32px;
     }
 
     .fornecedor {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: #0f172a;
       font-weight: 600;
       white-space: nowrap;
@@ -281,6 +290,7 @@
     @media print {
       body {
         background: #fff;
+        margin: 0;
       }
 
       header,
@@ -313,6 +323,15 @@
       .label-layout {
         box-shadow: none;
         border: 1px solid #e2e8f0;
+        page-break-after: always;
+        width: var(--total-largura);
+        height: var(--label-height);
+        margin: 0 auto;
+      }
+
+      @page {
+        size: 9.98cm 1.2cm;
+        margin: 0;
       }
     }
   </style>
@@ -432,6 +451,9 @@
       const etiqueta = document.createElement('div');
       etiqueta.className = 'label-layout';
 
+      const margemInicio = document.createElement('div');
+      margemInicio.className = 'espaco margem-inicio';
+
       const frente = document.createElement('div');
       frente.className = 'face frente';
       const codigoFrente = document.createElement('div');
@@ -473,8 +495,17 @@
       verso.appendChild(barcodeWrapper);
       verso.appendChild(fornecedorEl);
 
+      const rabicho = document.createElement('div');
+      rabicho.className = 'espaco rabicho';
+
+      const margemFim = document.createElement('div');
+      margemFim.className = 'espaco margem-fim';
+
+      etiqueta.appendChild(margemInicio);
       etiqueta.appendChild(frente);
       etiqueta.appendChild(verso);
+      etiqueta.appendChild(rabicho);
+      etiqueta.appendChild(margemFim);
 
       labelsList.appendChild(etiqueta);
 
@@ -483,8 +514,140 @@
         displayValue: false,
         lineColor: '#111827',
         width: 1.6,
-        height: 44,
+        height: 32,
         margin: 2,
+      });
+    }
+
+    function imprimirEtiquetas() {
+      const etiquetas = labelsList.querySelectorAll('.label-layout');
+      if (!etiquetas.length || labelsList.querySelector('.placeholder')) return;
+
+      const estilosImpressao = `
+        :root {
+          --label-height: 1.2cm;
+          --margin-inicio: 0.28cm;
+          --frente: 3cm;
+          --verso: 3cm;
+          --rabicho: 3.5cm;
+          --margin-fim: 0.2cm;
+          --total-largura: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+          background: #fff;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          align-items: center;
+          font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        }
+
+        .label-layout {
+          display: grid;
+          grid-template-columns: var(--margin-inicio) var(--frente) var(--verso) var(--rabicho) var(--margin-fim);
+          width: var(--total-largura);
+          height: var(--label-height);
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
+          overflow: hidden;
+          page-break-after: always;
+        }
+
+        .espaco {
+          background: #f1f5f9;
+        }
+
+        .face {
+          padding: 4px 6px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 4px;
+          height: 100%;
+          overflow: hidden;
+        }
+
+        .face.frente {
+          background: #f8fafc;
+          border-right: 1px dashed #e2e8f0;
+        }
+
+        .face.verso {
+          background: #fff;
+        }
+
+        .codigo-maior {
+          font-size: 0.95rem;
+          letter-spacing: 0.25px;
+          font-weight: 700;
+          color: #0f172a;
+          line-height: 1.1;
+        }
+
+        .linha-inferior {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.8rem;
+          color: #0f172a;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .barcode-wrapper {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          height: 100%;
+        }
+
+        .barcode-wrapper svg {
+          width: 100%;
+          height: 32px;
+        }
+
+        .fornecedor {
+          font-size: 0.75rem;
+          color: #0f172a;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        @page {
+          size: 9.98cm 1.2cm;
+          margin: 0;
+        }
+      `;
+
+      const printWindow = window.open('', '_blank');
+      const printDocument = printWindow.document;
+      printDocument.write(
+        `<!DOCTYPE html><html lang="pt-BR"><head><title>Impressão de etiquetas</title><style>${estilosImpressao}</style></head><body></body></html>`
+      );
+
+      const corpo = printDocument.body;
+      etiquetas.forEach((etiqueta) => {
+        corpo.appendChild(etiqueta.cloneNode(true));
+      });
+
+      printDocument.close();
+      printWindow.focus();
+      printWindow.addEventListener('load', () => {
+        printWindow.print();
+        printWindow.close();
       });
     }
 
@@ -514,9 +677,7 @@
 
     enviarBtn.addEventListener('click', adicionarEtiquetas);
 
-    imprimirBtn.addEventListener('click', () => {
-      window.print();
-    });
+    imprimirBtn.addEventListener('click', imprimirEtiquetas);
 
     resetarBtn.addEventListener('click', () => {
       limparLista();
