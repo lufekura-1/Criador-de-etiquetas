@@ -8,7 +8,7 @@
     :root {
       --spacing: 12px;
       --card-radius: 12px;
-      --label-height: 2.4cm;
+      --label-height: 1.2cm;
       --margin-inicio: 0.28cm;
       --frente: 3cm;
       --verso: 3cm;
@@ -176,87 +176,96 @@
       border-radius: 10px;
       padding: 18px;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
-      min-height: 320px;
+      min-height: 520px;
+    }
+
+    .labels-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 8px;
     }
 
     .label-layout {
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
       background: #fff;
       border-radius: 8px;
       overflow: hidden;
-      width: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
+      width: 12cm;
       height: var(--label-height);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
       border: 1px solid #e2e8f0;
     }
 
-    .margem {
-      background: #e2e8f0;
-      height: 100%;
-    }
-
-    .margem.inicio {
-      width: var(--margin-inicio);
-    }
-
-    .margem.fim {
-      width: var(--margin-fim);
-    }
-
-    .segmento {
-      height: 100%;
-      padding: 10px;
+    .face {
+      padding: 6px 10px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 6px;
+      justify-content: space-between;
+      gap: 4px;
     }
 
-    .segmento.frente {
-      width: var(--frente);
+    .face.frente {
       background: #f8fafc;
       border-right: 1px dashed #e2e8f0;
     }
 
-    .segmento.verso {
-      width: var(--verso);
+    .face.verso {
       background: #fff;
-      border-right: 1px dashed #e2e8f0;
-    }
-
-    .segmento.rabicho {
-      width: var(--rabicho);
-      background: #f1f5f9;
-    }
-
-    .linha-texto {
-      font-size: 0.92rem;
-      color: #0f172a;
-      font-weight: 600;
-      word-break: break-word;
     }
 
     .codigo-maior {
       font-size: 1.05rem;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      color: #0f172a;
     }
 
-    .codigo-barras svg {
-      width: 100%;
-      height: 50px;
+    .linha-inferior {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #0f172a;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    #barcode {
+    .barcode-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .barcode-wrapper svg {
       width: 100%;
-      height: 52px;
+      height: 44px;
+    }
+
+    .fornecedor {
+      font-size: 0.78rem;
+      color: #0f172a;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .placeholder {
       color: #94a3b8;
       font-weight: 500;
+      margin: 0;
     }
 
     @media (max-width: 768px) {
@@ -265,11 +274,7 @@
       }
 
       .label-preview {
-        min-height: 280px;
-      }
-
-      .label-layout {
-        transform: scale(0.95);
+        min-height: 360px;
       }
     }
 
@@ -299,9 +304,15 @@
         padding: 0;
       }
 
+      .labels-list {
+        max-height: none;
+        overflow: visible;
+        gap: 6px;
+      }
+
       .label-layout {
         box-shadow: none;
-        border: none;
+        border: 1px solid #e2e8f0;
       }
     }
   </style>
@@ -354,7 +365,9 @@
         </fieldset>
 
         <div class="actions">
+          <button type="button" id="resetar">Resetar</button>
           <button type="button" id="enviar">Enviar para etiqueta</button>
+          <button type="button" id="imprimir">Imprimir</button>
         </div>
       </form>
     </section>
@@ -367,28 +380,8 @@
         </div>
 
         <div class="label-preview" aria-live="polite">
-          <div class="label-layout" role="presentation">
-            <div class="margem inicio" aria-hidden="true"></div>
-
-            <div class="segmento frente">
-              <div class="linha-texto codigo-maior" id="preview-codigo" aria-label="Código da frente">--</div>
-              <div class="linha-texto" id="preview-peso" aria-label="Peso">Peso: --</div>
-              <div class="linha-texto" id="preview-loja" aria-label="Loja">Loja: --</div>
-            </div>
-
-            <div class="segmento verso">
-              <div class="linha-texto" id="preview-codigo-verso" aria-label="Código no verso">--</div>
-              <div class="codigo-barras">
-                <svg id="barcode" aria-label="Código de barras"></svg>
-              </div>
-              <div class="linha-texto" id="preview-fornecedor" aria-label="Fornecedor">Fornecedor: --</div>
-            </div>
-
-            <div class="segmento rabicho">
-              <div class="linha-texto" id="preview-quantidade" aria-label="Quantidade">Qtd: --</div>
-            </div>
-
-            <div class="margem fim" aria-hidden="true"></div>
+          <div class="labels-list" id="labels-list">
+            <p class="placeholder">Envie dados para ver as etiquetas empilhadas.</p>
           </div>
         </div>
       </div>
@@ -399,6 +392,8 @@
   <script>
     const form = document.getElementById('label-form');
     const enviarBtn = document.getElementById('enviar');
+    const imprimirBtn = document.getElementById('imprimir');
+    const resetarBtn = document.getElementById('resetar');
 
     const codigoInput = document.getElementById('codigo');
     const pesoInput = document.getElementById('peso');
@@ -406,77 +401,130 @@
     const quantidadeInput = document.getElementById('quantidade');
     const lojaInputs = Array.from(document.querySelectorAll('input[name="loja"]'));
 
-    const previewCodigo = document.getElementById('preview-codigo');
-    const previewCodigoVerso = document.getElementById('preview-codigo-verso');
-    const previewPeso = document.getElementById('preview-peso');
-    const previewLoja = document.getElementById('preview-loja');
-    const previewFornecedor = document.getElementById('preview-fornecedor');
-    const previewQuantidade = document.getElementById('preview-quantidade');
-    const barcodeSvg = document.getElementById('barcode');
+    const labelsList = document.getElementById('labels-list');
 
-    function formatarTexto(valor, prefixo) {
-      if (!valor) return prefixo ? `${prefixo} --` : '--';
-      return prefixo ? `${prefixo} ${valor}` : valor;
+    function placeholderMensagem() {
+      const placeholder = document.createElement('p');
+      placeholder.textContent = 'Envie dados para ver as etiquetas empilhadas.';
+      placeholder.className = 'placeholder';
+      labelsList.appendChild(placeholder);
+    }
+
+    function limparLista() {
+      labelsList.innerHTML = '';
+      placeholderMensagem();
     }
 
     function lojasSelecionadas() {
       const selecionadas = lojaInputs.filter((input) => input.checked).map((input) => input.value);
-      return selecionadas.length ? selecionadas.join(' | ') : '--';
+      return selecionadas.join(' ');
     }
 
-    function gerarBarcode(conteudo) {
-      if (!conteudo) {
-        barcodeSvg.innerHTML = '';
-        const placeholder = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        placeholder.setAttribute('x', '10');
-        placeholder.setAttribute('y', '30');
-        placeholder.setAttribute('fill', '#94a3b8');
-        placeholder.textContent = 'Gerar CODE128';
-        barcodeSvg.appendChild(placeholder);
-        return;
-      }
+    function formatarPeso(valor) {
+      const peso = valor.trim();
+      if (!peso) return '';
+      return /g$/i.test(peso) ? peso : `${peso}g`;
+    }
 
-      JsBarcode('#barcode', conteudo, {
+    function gerarEtiqueta({ codigo, peso, lojas, fornecedor }) {
+      if (!codigo) return;
+
+      const etiqueta = document.createElement('div');
+      etiqueta.className = 'label-layout';
+
+      const frente = document.createElement('div');
+      frente.className = 'face frente';
+      const codigoFrente = document.createElement('div');
+      codigoFrente.className = 'codigo-maior';
+      codigoFrente.textContent = codigo;
+
+      const linhaInferior = document.createElement('div');
+      linhaInferior.className = 'linha-inferior';
+      const pesoSpan = document.createElement('span');
+      pesoSpan.textContent = peso;
+      const lojaSpan = document.createElement('span');
+      lojaSpan.textContent = lojas;
+      const detalhes = [pesoSpan, lojaSpan].filter((el) => el.textContent);
+      detalhes.forEach((el, index) => {
+        linhaInferior.appendChild(el);
+        if (index === 0 && detalhes.length > 1) {
+          const separador = document.createElement('span');
+          separador.textContent = '|';
+          separador.style.opacity = '0.7';
+          separador.style.fontWeight = '600';
+          linhaInferior.appendChild(separador);
+        }
+      });
+
+      frente.appendChild(codigoFrente);
+      frente.appendChild(linhaInferior);
+
+      const verso = document.createElement('div');
+      verso.className = 'face verso';
+      const barcodeWrapper = document.createElement('div');
+      barcodeWrapper.className = 'barcode-wrapper';
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      barcodeWrapper.appendChild(svg);
+
+      const fornecedorEl = document.createElement('div');
+      fornecedorEl.className = 'fornecedor';
+      fornecedorEl.textContent = fornecedor;
+
+      verso.appendChild(barcodeWrapper);
+      verso.appendChild(fornecedorEl);
+
+      etiqueta.appendChild(frente);
+      etiqueta.appendChild(verso);
+
+      labelsList.appendChild(etiqueta);
+
+      JsBarcode(svg, codigo, {
         format: 'CODE128',
         displayValue: false,
         lineColor: '#111827',
-        width: 1,
-        height: 50,
-        margin: 0,
+        width: 1.6,
+        height: 44,
+        margin: 2,
       });
     }
 
-    function atualizarVisualizacao() {
+    function adicionarEtiquetas() {
+      if (!form.reportValidity()) return;
+
       const codigo = codigoInput.value.trim();
-      const peso = pesoInput.value.trim();
+      const peso = formatarPeso(pesoInput.value);
       const fornecedor = fornecedorInput.value.trim();
-      const quantidade = quantidadeInput.value.trim();
       const lojas = lojasSelecionadas();
+      const quantidade = Math.max(1, Number.parseInt(quantidadeInput.value, 10) || 1);
 
-      previewCodigo.textContent = formatarTexto(codigo);
-      previewCodigoVerso.textContent = formatarTexto(codigo);
-      previewPeso.textContent = formatarTexto(peso, 'Peso:');
-      previewLoja.textContent = `Loja: ${lojas}`;
-      previewFornecedor.textContent = formatarTexto(fornecedor, 'Fornecedor:');
-      previewQuantidade.textContent = formatarTexto(quantidade, 'Qtd:');
+      if (labelsList.querySelector('.placeholder')) {
+        labelsList.innerHTML = '';
+      }
 
-      gerarBarcode(codigo);
-    }
+      Array.from({ length: quantidade }).forEach(() => {
+        gerarEtiqueta({ codigo, peso, lojas, fornecedor });
+      });
 
-    function limparCampos() {
       codigoInput.value = '';
       pesoInput.value = '';
       quantidadeInput.value = '';
+      lojaInputs.forEach((input) => (input.checked = false));
+      codigoInput.focus();
     }
 
-    enviarBtn.addEventListener('click', () => {
-      atualizarVisualizacao();
-      limparCampos();
+    enviarBtn.addEventListener('click', adicionarEtiquetas);
+
+    imprimirBtn.addEventListener('click', () => {
+      window.print();
+    });
+
+    resetarBtn.addEventListener('click', () => {
+      limparLista();
+      form.reset();
       codigoInput.focus();
     });
 
-    // Atualiza pré-visualização inicial com placeholders
-    gerarBarcode('');
+    placeholderMensagem();
   </script>
 </body>
 </html>
