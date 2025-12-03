@@ -58,30 +58,6 @@
       gap: 12px;
     }
 
-    .menu-links { 
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .menu-links button {
-      background: transparent;
-      color: #e2e8f0;
-      border: 1px solid transparent;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-    }
-
-    .menu-links button:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .menu-links button.active {
-      background: #111827;
-      border-color: rgba(255, 255, 255, 0.08);
-    }
-
     .page {
       max-width: 1280px;
       margin: 24px auto;
@@ -176,6 +152,12 @@
       gap: 10px;
     }
 
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
     .visualizador-header {
       display: flex;
       justify-content: space-between;
@@ -200,6 +182,22 @@
       font-size: 1rem;
       font-weight: 600;
       transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    .btn-green {
+      background: #16a34a;
+    }
+
+    .btn-green:hover {
+      background: #15803d;
+    }
+
+    .btn-orange {
+      background: #f97316;
+    }
+
+    .btn-orange:hover {
+      background: #ea580c;
     }
 
     button:hover {
@@ -232,6 +230,8 @@
       align-items: stretch;
       justify-content: center;
       min-height: 520px;
+      max-height: 640px;
+      overflow-y: auto;
     }
 
     .labels-list {
@@ -239,8 +239,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      max-height: 520px;
-      overflow-y: auto;
       padding-right: 8px;
     }
 
@@ -343,88 +341,116 @@
       margin: 0;
     }
 
-    .editor-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 12px;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ecfeff;
+      color: #0f172a;
+      border: 1px solid #67e8f9;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(8, 47, 73, 0.12);
     }
 
-    .editor-preview-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .editor-preview-wrapper .label-preview {
-      min-height: 300px;
-    }
-
-    .control-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .control-list label {
+    .badge small {
+      display: block;
+      font-size: 0.85rem;
+      color: #0ea5e9;
       font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .badge strong {
+      font-size: 1.25rem;
       color: #0f172a;
     }
 
-    .control-list small {
-      color: #64748b;
-      font-weight: 500;
+    .editar-btn {
+      background: #2563eb;
     }
 
-    .control-list input[type='range'],
-    .control-list input[type='number'] {
-      width: 100%;
-      padding: 8px 10px;
+    .editar-btn:hover {
+      background: #1d4ed8;
     }
 
-    .ajustes-log {
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 10px;
-      padding: 12px;
-      max-height: 260px;
-      overflow-y: auto;
-      border: 1px solid #1f2937;
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 20;
     }
 
-    .ajustes-log h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
-    }
-
-    .ajustes-log ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .modal-backdrop.open {
       display: flex;
-      flex-direction: column;
-      gap: 6px;
     }
 
-    .ajustes-log li {
-      background: #111827;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 0.92rem;
-      border: 1px solid #1f2937;
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16);
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      display: grid;
+      gap: 16px;
     }
 
-    @media (max-width: 768px) {
-      header {
-        height: 56px;
-      }
-
-      .editor-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .label-preview {
-        min-height: 360px;
-      }
+    .modal header {
+      background: transparent;
+      color: #0f172a;
+      padding: 0;
+      height: auto;
     }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .modal-lista {
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 6px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .modal-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #f8fafc;
+    }
+
+    .modal-item strong {
+      display: block;
+      color: #0f172a;
+    }
+
+    .modal-item small {
+      color: #475569;
+    }
+
+      @media (max-width: 768px) {
+        header {
+          height: 56px;
+        }
+
+        .label-preview {
+          min-height: 360px;
+        }
+      }
 
     @media print {
       body {
@@ -478,13 +504,7 @@
   <body>
     <header>
       <nav aria-label="Menu superior">
-        <span>Menu</span>
-        <div class="menu-links" role="tablist">
-          <button id="page-gerador-tab" class="active" data-page-target="page-gerador" role="tab" aria-controls="page-gerador" aria-selected="true">
-            Gerar etiquetas
-          </button>
-          <button id="page-editor-tab" data-page-target="page-editor" role="tab" aria-controls="page-editor" aria-selected="false">Editor de etiqueta</button>
-        </div>
+        <span>Gerador de etiquetas</span>
       </nav>
     </header>
 
@@ -498,11 +518,15 @@
       <form id="label-form">
         <fieldset>
           <legend>Frente</legend>
-          <label for="codigo">Código</label>
-          <input type="text" id="codigo" name="codigo" autocomplete="off" placeholder="Ex.: AN1020" required />
+          <div class="input-row">
+            <label for="codigo">Código
+              <input type="text" id="codigo" name="codigo" autocomplete="off" placeholder="Digite o código" required />
+            </label>
 
-          <label for="peso">Peso</label>
-          <input type="text" id="peso" name="peso" autocomplete="off" placeholder="Ex.: 250g" />
+            <label for="peso">Peso
+              <input type="text" id="peso" name="peso" autocomplete="off" placeholder="Digite o peso" />
+            </label>
+          </div>
 
           <div>
             <span style="font-weight: 600; color: #334155;">Loja</span>
@@ -518,17 +542,16 @@
           <legend>Verso</legend>
           <label for="fornecedor">Informações e Fornecedor</label>
           <input type="text" id="fornecedor" name="fornecedor" autocomplete="off" placeholder="Digite o fornecedor" />
-          <p class="help">O código de barras (CODE128) será gerado a partir do código informado na frente.</p>
         </fieldset>
 
         <fieldset>
           <legend>Informações</legend>
           <label for="quantidade">Quantidade</label>
-          <input type="number" id="quantidade" name="quantidade" min="1" step="1" placeholder="Ex.: 1" />
+          <input type="number" id="quantidade" name="quantidade" min="1" step="1" placeholder="" />
         </fieldset>
 
         <div class="actions">
-          <button type="button" id="enviar">Enviar para etiqueta</button>
+          <button type="button" id="enviar" class="btn-green">Enviar para etiqueta</button>
         </div>
       </form>
     </section>
@@ -538,11 +561,17 @@
         <div class="visualizador-header">
           <div>
             <h2>Visualizador de impressão</h2>
-            <p class="help">As proporções seguem a folha: 0,28cm | 3cm | 3cm | 3,5cm | 0,2cm.</p>
+            <div class="badge" aria-live="polite">
+              <div>
+                <span>Prontas para impressão</span>
+                <small><span id="contador-etiquetas">0</span> etiquetas / <span id="contador-paginas">0</span> páginas</small>
+              </div>
+            </div>
           </div>
           <div class="visualizador-actions">
-            <button type="button" id="resetar">Resetar</button>
-            <button type="button" id="imprimir">Imprimir</button>
+            <button type="button" id="editar" class="editar-btn">Editar</button>
+            <button type="button" id="resetar" class="btn-orange">Resetar</button>
+            <button type="button" id="imprimir" class="btn-green">Imprimir</button>
           </div>
         </div>
 
@@ -555,86 +584,19 @@
     </section>
   </main>
 
-  <main id="page-editor" class="page" role="tabpanel" aria-labelledby="page-editor-tab">
-    <section class="card">
-      <div>
-        <h2>Editor de etiqueta</h2>
-        <p class="help">Ajuste a posição e o tamanho dos dados da etiqueta e acompanhe o relatório abaixo.</p>
+  <div class="modal-backdrop" id="modal-edicao" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal">
+      <header>
+        <h3 id="modal-titulo">Editar etiquetas</h3>
+        <p class="help" style="margin: 4px 0 0;">Selecione as etiquetas que deseja remover.</p>
+      </header>
+      <div class="modal-lista" id="lista-edicao"></div>
+      <div class="modal-actions">
+        <button type="button" id="cancelar-edicao">Cancelar</button>
+        <button type="button" id="remover-selecionadas" class="btn-orange">Remover selecionadas</button>
       </div>
-
-      <div class="editor-grid">
-        <div class="editor-preview-wrapper">
-          <h3>Pré-visualização em tempo real</h3>
-          <div class="label-preview">
-            <div class="labels-list">
-              <div class="label-layout" aria-label="Pré-visualização da etiqueta">
-                <div class="espaco margem-inicio"></div>
-                <div class="face frente">
-                  <div class="codigo-maior">AN1020</div>
-                  <div class="linha-inferior"><span>250g</span><span>|</span><span class="loja-texto">C E A</span></div>
-                </div>
-                <div class="face verso">
-                  <div class="barcode-wrapper">
-                    <svg id="preview-barcode"></svg>
-                  </div>
-                  <div class="fornecedor">Fornecedor Exemplo</div>
-                </div>
-                <div class="espaco rabicho"></div>
-                <div class="espaco margem-fim"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-list" id="controle-editor">
-          <label>
-            Tamanho do código
-            <input type="range" min="12" max="26" step="0.5" data-css-var="--codigo-font-size" data-unit="px" />
-            <small>Afeta o texto maior da frente.</small>
-          </label>
-          <label>
-            Espaçamento do código
-            <input type="range" min="0" max="2" step="0.05" data-css-var="--codigo-letter-spacing" data-unit="px" />
-            <small>Controla o espaçamento entre letras.</small>
-          </label>
-          <label>
-            Tamanho da linha inferior
-            <input type="range" min="10" max="20" step="0.5" data-css-var="--linha-font-size" data-unit="px" />
-            <small>Peso e lojas.</small>
-          </label>
-          <label>
-            Espaçamento entre peso/lojas
-            <input type="range" min="0" max="18" step="1" data-css-var="--linha-gap" data-unit="px" />
-          </label>
-          <label>
-            Tamanho do fornecedor
-            <input type="range" min="10" max="20" step="0.5" data-css-var="--fornecedor-font-size" data-unit="px" />
-          </label>
-          <label>
-            Altura do código de barras
-            <input type="range" min="20" max="80" step="1" data-css-var="--barcode-height" data-unit="px" />
-          </label>
-          <label>
-            Espaçamento interno
-            <input type="range" min="0" max="14" step="1" data-css-var="--face-padding" data-unit="px" />
-            <small>Afeta frente e verso.</small>
-          </label>
-          <label>
-            Distância vertical
-            <input type="range" min="-12" max="12" step="1" data-css-var="--face-offset" data-unit="px" />
-            <small>Move o conteúdo para cima ou para baixo.</small>
-          </label>
-        </div>
-      </div>
-
-      <div class="ajustes-log" aria-live="polite">
-        <h3>Relatório de ajustes</h3>
-        <ul id="ajustes-log-list">
-          <li>Nenhum ajuste realizado ainda.</li>
-        </ul>
-      </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script>
@@ -642,9 +604,13 @@
     const enviarBtn = document.getElementById('enviar');
     const imprimirBtn = document.getElementById('imprimir');
     const resetarBtn = document.getElementById('resetar');
-
-    const pageButtons = document.querySelectorAll('[data-page-target]');
-    const pages = document.querySelectorAll('.page');
+    const editarBtn = document.getElementById('editar');
+    const modal = document.getElementById('modal-edicao');
+    const listaEdicao = document.getElementById('lista-edicao');
+    const cancelarEdicaoBtn = document.getElementById('cancelar-edicao');
+    const removerSelecionadasBtn = document.getElementById('remover-selecionadas');
+    const contadorEtiquetas = document.getElementById('contador-etiquetas');
+    const contadorPaginas = document.getElementById('contador-paginas');
 
     const codigoInput = document.getElementById('codigo');
     const pesoInput = document.getElementById('peso');
@@ -653,30 +619,34 @@
     const lojaInputs = Array.from(document.querySelectorAll('input[name="loja"]'));
 
     const labelsList = document.getElementById('labels-list');
-    const controleEditor = document.getElementById('controle-editor');
-    const ajustesLogList = document.getElementById('ajustes-log-list');
-
-    const nomeVariaveis = {
-      '--codigo-font-size': 'Tamanho do código',
-      '--codigo-letter-spacing': 'Espaçamento do código',
-      '--linha-font-size': 'Linha inferior',
-      '--linha-gap': 'Gap linha inferior',
-      '--fornecedor-font-size': 'Fornecedor',
-      '--barcode-height': 'Altura do código de barras',
-      '--face-padding': 'Espaçamento interno',
-      '--face-offset': 'Distância vertical',
-    };
+    const labelsData = [];
+    let labelIdCounter = 1;
 
     function placeholderMensagem() {
+      labelsList.innerHTML = '';
       const placeholder = document.createElement('p');
       placeholder.textContent = 'Envie dados para ver as etiquetas empilhadas.';
       placeholder.className = 'placeholder';
       labelsList.appendChild(placeholder);
     }
 
+    function garantirPlaceholder() {
+      if (!labelsData.length) {
+        placeholderMensagem();
+      }
+    }
+
+    function atualizarContador() {
+      const total = labelsData.length;
+      contadorEtiquetas.textContent = total;
+      contadorPaginas.textContent = total;
+    }
+
     function limparLista() {
-      labelsList.innerHTML = '';
+      labelsData.length = 0;
+      labelIdCounter = 1;
       placeholderMensagem();
+      atualizarContador();
     }
 
     function lojasSelecionadas() {
@@ -704,67 +674,12 @@
       return Number.isNaN(altura) ? 32 : altura;
     }
 
-    function registrarAjuste(varName, valor) {
-      if (!ajustesLogList) return;
-      if (ajustesLogList.firstElementChild && ajustesLogList.children.length === 1 && ajustesLogList.firstElementChild.textContent.includes('Nenhum')) {
-        ajustesLogList.innerHTML = '';
-      }
-
-      const item = document.createElement('li');
-      const horario = new Date().toLocaleTimeString('pt-BR', { hour12: false });
-      const nome = nomeVariaveis[varName] || varName;
-      item.textContent = `[${horario}] ${nome}: ${valor}`;
-      ajustesLogList.prepend(item);
-    }
-
-    function aplicarVariavel(input) {
-      const varName = input.dataset.cssVar;
-      if (!varName) return;
-
-      const unit = input.dataset.unit || '';
-      const valor = `${input.value}${unit}`;
-      document.documentElement.style.setProperty(varName, valor);
-      registrarAjuste(varName, valor);
-    }
-
-    function preencherValoresIniciais() {
-      if (!controleEditor) return;
-
-      const estilos = getComputedStyle(document.documentElement);
-      const inputs = Array.from(controleEditor.querySelectorAll('input'));
-
-      inputs.forEach((input) => {
-        const varName = input.dataset.cssVar;
-        const valorAtual = estilos.getPropertyValue(varName).trim();
-        const numero = parseFloat(valorAtual);
-        if (!Number.isNaN(numero)) {
-          input.value = numero;
-        }
-
-        input.addEventListener('input', () => aplicarVariavel(input));
-      });
-    }
-
-    function alternarPagina(id) {
-      pages.forEach((page) => page.classList.toggle('active', page.id === id));
-      pageButtons.forEach((btn) => {
-        const ativa = btn.dataset.pageTarget === id;
-        btn.classList.toggle('active', ativa);
-        btn.setAttribute('aria-selected', ativa);
-      });
-    }
-
-    pageButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        alternarPagina(btn.dataset.pageTarget);
-      });
-    });
-
-    function gerarEtiqueta({ codigo, peso, lojas, fornecedor }) {
+    function gerarEtiqueta({ id, codigo, peso, lojas, fornecedor }) {
       if (!codigo) return;
 
       const etiqueta = document.createElement('div');
       etiqueta.className = 'label-layout';
+      etiqueta.dataset.labelId = id;
 
       const margemInicio = document.createElement('div');
       margemInicio.className = 'espaco margem-inicio';
@@ -827,8 +742,10 @@
     }
 
     function imprimirEtiquetas() {
+      if (!labelsData.length) return;
+
       const etiquetas = labelsList.querySelectorAll('.label-layout');
-      if (!etiquetas.length || labelsList.querySelector('.placeholder')) return;
+      if (!etiquetas.length) return;
 
       const estilos = getComputedStyle(document.documentElement);
       const valorVar = (nome) => estilos.getPropertyValue(nome).trim();
@@ -899,11 +816,11 @@
           border-right: 1px dashed #e2e8f0;
         }
 
-    .face.verso {
-      background: #fff;
-      align-items: center;
-      justify-content: center;
-    }
+        .face.verso {
+          background: #fff;
+          align-items: center;
+          justify-content: center;
+        }
 
         .codigo-maior {
           font-size: var(--codigo-font-size);
@@ -946,18 +863,18 @@
           height: var(--barcode-height);
         }
 
-    .fornecedor {
-      font-size: var(--fornecedor-font-size);
-      color: #0f172a;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .fornecedor {
+          font-size: var(--fornecedor-font-size);
+          color: #0f172a;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
         @page {
           size: 9.98cm 1.3cm;
@@ -993,37 +910,86 @@
       const lojas = lojasSelecionadas();
       const quantidade = Math.max(1, Number.parseInt(quantidadeInput.value, 10) || 1);
 
-      if (labelsList.querySelector('.placeholder')) {
+      if (!labelsData.length && labelsList.querySelector('.placeholder')) {
         labelsList.innerHTML = '';
       }
 
       Array.from({ length: quantidade }).forEach(() => {
-        gerarEtiqueta({ codigo, peso, lojas, fornecedor });
+        const id = labelIdCounter++;
+        labelsData.push({ id, codigo, peso, lojas, fornecedor });
+        gerarEtiqueta({ id, codigo, peso, lojas, fornecedor });
       });
 
       codigoInput.value = '';
       pesoInput.value = '';
       quantidadeInput.value = '';
-      lojaInputs.forEach((input) => (input.checked = false));
       codigoInput.focus();
+
+      atualizarContador();
     }
 
-    function inicializarPreviewEditor() {
-      const svgPreview = document.getElementById('preview-barcode');
-      if (!svgPreview) return;
+    function abrirModalEdicao() {
+      listaEdicao.innerHTML = '';
 
-      JsBarcode(svgPreview, 'AN1020', {
-        format: 'CODE128',
-        displayValue: false,
-        lineColor: '#111827',
-        width: 1.6,
-        height: alturaCodigoBarras(),
-        margin: 2,
+      if (!labelsData.length) {
+        const aviso = document.createElement('p');
+        aviso.className = 'help';
+        aviso.textContent = 'Nenhuma etiqueta disponível para edição.';
+        listaEdicao.appendChild(aviso);
+      } else {
+        labelsData.forEach(({ id, codigo, peso, lojas, fornecedor }) => {
+          const label = document.createElement('label');
+          label.className = 'modal-item';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = id;
+
+          const detalhes = document.createElement('div');
+          const titulo = document.createElement('strong');
+          titulo.textContent = codigo || 'Sem código';
+          const info = document.createElement('small');
+          const partes = [peso, lojas, fornecedor].filter(Boolean);
+          info.textContent = partes.join(' | ') || 'Sem detalhes adicionais';
+
+          detalhes.appendChild(titulo);
+          detalhes.appendChild(info);
+
+          label.appendChild(checkbox);
+          label.appendChild(detalhes);
+
+          listaEdicao.appendChild(label);
+        });
+      }
+
+      modal.classList.add('open');
+    }
+
+    function fecharModalEdicao() {
+      modal.classList.remove('open');
+    }
+
+    function removerSelecionadas() {
+      const selecionadas = Array.from(listaEdicao.querySelectorAll('input:checked')).map((input) => Number(input.value));
+      if (!selecionadas.length) {
+        fecharModalEdicao();
+        return;
+      }
+
+      selecionadas.forEach((id) => {
+        const index = labelsData.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          labelsData.splice(index, 1);
+        }
+
+        const etiqueta = labelsList.querySelector(`[data-label-id="${id}"]`);
+        if (etiqueta) etiqueta.remove();
       });
-    }
 
-    preencherValoresIniciais();
-    inicializarPreviewEditor();
+      atualizarContador();
+      garantirPlaceholder();
+      fecharModalEdicao();
+    }
 
     enviarBtn.addEventListener('click', adicionarEtiquetas);
 
@@ -1035,7 +1001,12 @@
       codigoInput.focus();
     });
 
+    editarBtn.addEventListener('click', abrirModalEdicao);
+    cancelarEdicaoBtn.addEventListener('click', fecharModalEdicao);
+    removerSelecionadasBtn.addEventListener('click', removerSelecionadas);
+
     placeholderMensagem();
+    atualizarContador();
   </script>
 </body>
 </html>
