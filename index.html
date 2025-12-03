@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de Etiqueta - CODE128</title>
+  <style>
+    :root {
+      --spacing: 12px;
+      --card-radius: 12px;
+      --label-height: 2.4cm;
+      --margin-inicio: 0.28cm;
+      --frente: 3cm;
+      --verso: 3cm;
+      --rabicho: 3.5cm;
+      --margin-fim: 0.2cm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: #f7f7f9;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      width: 100%;
+      height: 52px;
+      background: #0f172a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    header nav {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 24px auto;
+      padding: 0 16px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 18px 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 420px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #0f172a;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    fieldset {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    fieldset legend {
+      padding: 0 8px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 150ms ease, box-shadow 150ms ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+    }
+
+    .lojas {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .lojas label {
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    button:hover {
+      background: #111827;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .help {
+      color: #475569;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .preview-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .label-preview {
+      background: #0b1224;
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+    }
+
+    .label-layout {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      width: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
+      height: var(--label-height);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      border: 1px solid #e2e8f0;
+    }
+
+    .margem {
+      background: #e2e8f0;
+      height: 100%;
+    }
+
+    .margem.inicio {
+      width: var(--margin-inicio);
+    }
+
+    .margem.fim {
+      width: var(--margin-fim);
+    }
+
+    .segmento {
+      height: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .segmento.frente {
+      width: var(--frente);
+      background: #f8fafc;
+      border-right: 1px dashed #e2e8f0;
+    }
+
+    .segmento.verso {
+      width: var(--verso);
+      background: #fff;
+      border-right: 1px dashed #e2e8f0;
+    }
+
+    .segmento.rabicho {
+      width: var(--rabicho);
+      background: #f1f5f9;
+    }
+
+    .linha-texto {
+      font-size: 0.92rem;
+      color: #0f172a;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .codigo-maior {
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+    }
+
+    .codigo-barras svg {
+      width: 100%;
+      height: 50px;
+    }
+
+    #barcode {
+      width: 100%;
+      height: 52px;
+    }
+
+    .placeholder {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        height: 56px;
+      }
+
+      .label-preview {
+        min-height: 280px;
+      }
+
+      .label-layout {
+        transform: scale(0.95);
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      header,
+      .card.dados {
+        display: none;
+      }
+
+      main {
+        margin: 0;
+        padding: 0;
+      }
+
+      .card.visualizador {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+      }
+
+      .label-preview {
+        background: transparent;
+        padding: 0;
+      }
+
+      .label-layout {
+        box-shadow: none;
+        border: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav aria-label="Menu superior">
+      <span>Menu</span>
+      <span></span>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card dados">
+      <div>
+        <h2>Dados</h2>
+        <p class="help">Preencha as informações e envie para visualizar a etiqueta.</p>
+      </div>
+
+      <form id="label-form">
+        <fieldset>
+          <legend>Frente</legend>
+          <label for="codigo">Código</label>
+          <input type="text" id="codigo" name="codigo" autocomplete="off" placeholder="Ex.: AN1020" required />
+
+          <label for="peso">Peso</label>
+          <input type="text" id="peso" name="peso" autocomplete="off" placeholder="Ex.: 250g" />
+
+          <div>
+            <span style="font-weight: 600; color: #334155;">Loja</span>
+            <div class="lojas" role="group" aria-label="Seleção de loja">
+              <label><input type="checkbox" name="loja" value="C" />C</label>
+              <label><input type="checkbox" name="loja" value="E" />E</label>
+              <label><input type="checkbox" name="loja" value="A" />A</label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Verso</legend>
+          <label for="fornecedor">Fornecedor</label>
+          <input type="text" id="fornecedor" name="fornecedor" autocomplete="off" placeholder="Digite o fornecedor" />
+          <p class="help">O código de barras (CODE128) será gerado a partir do código informado na frente.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Informações</legend>
+          <label for="quantidade">Quantidade</label>
+          <input type="number" id="quantidade" name="quantidade" min="1" step="1" placeholder="Ex.: 1" />
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" id="enviar">Enviar para etiqueta</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card visualizador">
+      <div class="preview-container">
+        <div>
+          <h2>Visualizador de impressão</h2>
+          <p class="help">As proporções seguem a folha: 0,28cm | 3cm | 3cm | 3,5cm | 0,2cm.</p>
+        </div>
+
+        <div class="label-preview" aria-live="polite">
+          <div class="label-layout" role="presentation">
+            <div class="margem inicio" aria-hidden="true"></div>
+
+            <div class="segmento frente">
+              <div class="linha-texto codigo-maior" id="preview-codigo" aria-label="Código da frente">--</div>
+              <div class="linha-texto" id="preview-peso" aria-label="Peso">Peso: --</div>
+              <div class="linha-texto" id="preview-loja" aria-label="Loja">Loja: --</div>
+            </div>
+
+            <div class="segmento verso">
+              <div class="linha-texto" id="preview-codigo-verso" aria-label="Código no verso">--</div>
+              <div class="codigo-barras">
+                <svg id="barcode" aria-label="Código de barras"></svg>
+              </div>
+              <div class="linha-texto" id="preview-fornecedor" aria-label="Fornecedor">Fornecedor: --</div>
+            </div>
+
+            <div class="segmento rabicho">
+              <div class="linha-texto" id="preview-quantidade" aria-label="Quantidade">Qtd: --</div>
+            </div>
+
+            <div class="margem fim" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script>
+    const form = document.getElementById('label-form');
+    const enviarBtn = document.getElementById('enviar');
+
+    const codigoInput = document.getElementById('codigo');
+    const pesoInput = document.getElementById('peso');
+    const fornecedorInput = document.getElementById('fornecedor');
+    const quantidadeInput = document.getElementById('quantidade');
+    const lojaInputs = Array.from(document.querySelectorAll('input[name="loja"]'));
+
+    const previewCodigo = document.getElementById('preview-codigo');
+    const previewCodigoVerso = document.getElementById('preview-codigo-verso');
+    const previewPeso = document.getElementById('preview-peso');
+    const previewLoja = document.getElementById('preview-loja');
+    const previewFornecedor = document.getElementById('preview-fornecedor');
+    const previewQuantidade = document.getElementById('preview-quantidade');
+    const barcodeSvg = document.getElementById('barcode');
+
+    function formatarTexto(valor, prefixo) {
+      if (!valor) return prefixo ? `${prefixo} --` : '--';
+      return prefixo ? `${prefixo} ${valor}` : valor;
+    }
+
+    function lojasSelecionadas() {
+      const selecionadas = lojaInputs.filter((input) => input.checked).map((input) => input.value);
+      return selecionadas.length ? selecionadas.join(' | ') : '--';
+    }
+
+    function gerarBarcode(conteudo) {
+      if (!conteudo) {
+        barcodeSvg.innerHTML = '';
+        const placeholder = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        placeholder.setAttribute('x', '10');
+        placeholder.setAttribute('y', '30');
+        placeholder.setAttribute('fill', '#94a3b8');
+        placeholder.textContent = 'Gerar CODE128';
+        barcodeSvg.appendChild(placeholder);
+        return;
+      }
+
+      JsBarcode('#barcode', conteudo, {
+        format: 'CODE128',
+        displayValue: false,
+        lineColor: '#111827',
+        width: 1,
+        height: 50,
+        margin: 0,
+      });
+    }
+
+    function atualizarVisualizacao() {
+      const codigo = codigoInput.value.trim();
+      const peso = pesoInput.value.trim();
+      const fornecedor = fornecedorInput.value.trim();
+      const quantidade = quantidadeInput.value.trim();
+      const lojas = lojasSelecionadas();
+
+      previewCodigo.textContent = formatarTexto(codigo);
+      previewCodigoVerso.textContent = formatarTexto(codigo);
+      previewPeso.textContent = formatarTexto(peso, 'Peso:');
+      previewLoja.textContent = `Loja: ${lojas}`;
+      previewFornecedor.textContent = formatarTexto(fornecedor, 'Fornecedor:');
+      previewQuantidade.textContent = formatarTexto(quantidade, 'Qtd:');
+
+      gerarBarcode(codigo);
+    }
+
+    function limparCampos() {
+      codigoInput.value = '';
+      pesoInput.value = '';
+      quantidadeInput.value = '';
+    }
+
+    enviarBtn.addEventListener('click', () => {
+      atualizarVisualizacao();
+      limparCampos();
+      codigoInput.focus();
+    });
+
+    // Atualiza pré-visualização inicial com placeholders
+    gerarBarcode('');
+  </script>
+</body>
+</html>
