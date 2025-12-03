@@ -58,7 +58,7 @@
       gap: 12px;
     }
 
-    .menu-links {
+    .menu-links { 
       display: flex;
       gap: 10px;
       align-items: center;
@@ -176,6 +176,20 @@
       gap: 10px;
     }
 
+    .visualizador-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .visualizador-actions {
+      display: flex;
+      gap: 10px;
+      align-self: center;
+      flex-wrap: wrap;
+    }
+
     button {
       cursor: pointer;
       background: #0f172a;
@@ -288,6 +302,12 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .loja-texto {
+      margin-left: auto;
     }
 
     .barcode-wrapper {
@@ -508,18 +528,22 @@
         </fieldset>
 
         <div class="actions">
-          <button type="button" id="resetar">Resetar</button>
           <button type="button" id="enviar">Enviar para etiqueta</button>
-          <button type="button" id="imprimir">Imprimir</button>
         </div>
       </form>
     </section>
 
     <section class="card visualizador">
       <div class="preview-container">
-        <div>
-          <h2>Visualizador de impressão</h2>
-          <p class="help">As proporções seguem a folha: 0,28cm | 3cm | 3cm | 3,5cm | 0,2cm.</p>
+        <div class="visualizador-header">
+          <div>
+            <h2>Visualizador de impressão</h2>
+            <p class="help">As proporções seguem a folha: 0,28cm | 3cm | 3cm | 3,5cm | 0,2cm.</p>
+          </div>
+          <div class="visualizador-actions">
+            <button type="button" id="resetar">Resetar</button>
+            <button type="button" id="imprimir">Imprimir</button>
+          </div>
         </div>
 
         <div class="label-preview" aria-live="polite">
@@ -547,7 +571,7 @@
                 <div class="espaco margem-inicio"></div>
                 <div class="face frente">
                   <div class="codigo-maior">AN1020</div>
-                  <div class="linha-inferior"><span>250g</span><span>|</span><span>C E A</span></div>
+                  <div class="linha-inferior"><span>250g</span><span>|</span><span class="loja-texto">C E A</span></div>
                 </div>
                 <div class="face verso">
                   <div class="barcode-wrapper">
@@ -756,6 +780,7 @@
       const pesoSpan = document.createElement('span');
       pesoSpan.textContent = peso;
       const lojaSpan = document.createElement('span');
+      lojaSpan.className = 'loja-texto';
       lojaSpan.textContent = lojas;
       const detalhes = [pesoSpan, lojaSpan].filter((el) => el.textContent);
       detalhes.forEach((el) => linhaInferior.appendChild(el));
@@ -899,6 +924,12 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .loja-texto {
+          margin-left: auto;
         }
 
         .barcode-wrapper {
