@@ -15,6 +15,15 @@
       --rabicho: 3.5cm;
       --margin-fim: 0.2cm;
       --total-largura: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
+      --face-padding: 4px;
+      --face-gap: 4px;
+      --codigo-font-size: 15px;
+      --codigo-letter-spacing: 0.25px;
+      --linha-font-size: 13px;
+      --linha-gap: 6px;
+      --fornecedor-font-size: 12px;
+      --barcode-height: 32px;
+      --face-offset: 0px;
     }
 
     * {
@@ -46,15 +55,44 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
     }
 
-    main {
+    .menu-links {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .menu-links button {
+      background: transparent;
+      color: #e2e8f0;
+      border: 1px solid transparent;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .menu-links button:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .menu-links button.active {
+      background: #111827;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .page {
       max-width: 1280px;
       margin: 24px auto;
       padding: 0 16px;
       display: grid;
       gap: 16px;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    .page:not(.active) {
+      display: none;
     }
 
     .card {
@@ -210,13 +248,14 @@
     }
 
     .face {
-      padding: 4px 6px;
+      padding: var(--face-padding) 6px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 4px;
+      gap: var(--face-gap);
       height: 100%;
       overflow: hidden;
+      transform: translateY(var(--face-offset));
     }
 
     .face.frente {
@@ -229,8 +268,8 @@
     }
 
     .codigo-maior {
-      font-size: 0.95rem;
-      letter-spacing: 0.25px;
+      font-size: var(--codigo-font-size);
+      letter-spacing: var(--codigo-letter-spacing);
       font-weight: 700;
       color: #0f172a;
       line-height: 1.1;
@@ -239,8 +278,8 @@
     .linha-inferior {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
+      gap: var(--linha-gap);
+      font-size: var(--linha-font-size);
       color: #0f172a;
       font-weight: 600;
       white-space: nowrap;
@@ -259,11 +298,11 @@
 
     .barcode-wrapper svg {
       width: 100%;
-      height: 32px;
+      height: var(--barcode-height);
     }
 
     .fornecedor {
-      font-size: 0.75rem;
+      font-size: var(--fornecedor-font-size);
       color: #0f172a;
       font-weight: 600;
       white-space: nowrap;
@@ -277,9 +316,82 @@
       margin: 0;
     }
 
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 12px;
+    }
+
+    .editor-preview-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .editor-preview-wrapper .label-preview {
+      min-height: 300px;
+    }
+
+    .control-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .control-list label {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .control-list small {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .control-list input[type='range'],
+    .control-list input[type='number'] {
+      width: 100%;
+      padding: 8px 10px;
+    }
+
+    .ajustes-log {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      max-height: 260px;
+      overflow-y: auto;
+      border: 1px solid #1f2937;
+    }
+
+    .ajustes-log h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .ajustes-log ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ajustes-log li {
+      background: #111827;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      border: 1px solid #1f2937;
+    }
+
     @media (max-width: 768px) {
       header {
         height: 56px;
+      }
+
+      .editor-grid {
+        grid-template-columns: 1fr;
       }
 
       .label-preview {
@@ -336,18 +448,23 @@
     }
   </style>
 </head>
-<body>
-  <header>
-    <nav aria-label="Menu superior">
-      <span>Menu</span>
-      <span></span>
-    </nav>
-  </header>
+  <body>
+    <header>
+      <nav aria-label="Menu superior">
+        <span>Menu</span>
+        <div class="menu-links" role="tablist">
+          <button id="page-gerador-tab" class="active" data-page-target="page-gerador" role="tab" aria-controls="page-gerador" aria-selected="true">
+            Gerar etiquetas
+          </button>
+          <button id="page-editor-tab" data-page-target="page-editor" role="tab" aria-controls="page-editor" aria-selected="false">Editor de etiqueta</button>
+        </div>
+      </nav>
+    </header>
 
-  <main>
-    <section class="card dados">
-      <div>
-        <h2>Dados</h2>
+    <main id="page-gerador" class="page active" role="tabpanel" aria-labelledby="page-gerador-tab">
+      <section class="card dados">
+        <div>
+          <h2>Dados</h2>
         <p class="help">Preencha as informações e envie para visualizar a etiqueta.</p>
       </div>
 
@@ -407,12 +524,96 @@
     </section>
   </main>
 
+  <main id="page-editor" class="page" role="tabpanel" aria-labelledby="page-editor-tab">
+    <section class="card">
+      <div>
+        <h2>Editor de etiqueta</h2>
+        <p class="help">Ajuste a posição e o tamanho dos dados da etiqueta e acompanhe o relatório abaixo.</p>
+      </div>
+
+      <div class="editor-grid">
+        <div class="editor-preview-wrapper">
+          <h3>Pré-visualização em tempo real</h3>
+          <div class="label-preview">
+            <div class="labels-list">
+              <div class="label-layout" aria-label="Pré-visualização da etiqueta">
+                <div class="espaco margem-inicio"></div>
+                <div class="face frente">
+                  <div class="codigo-maior">AN1020</div>
+                  <div class="linha-inferior"><span>250g</span><span>|</span><span>C E A</span></div>
+                </div>
+                <div class="face verso">
+                  <div class="barcode-wrapper">
+                    <svg id="preview-barcode"></svg>
+                  </div>
+                  <div class="fornecedor">Fornecedor Exemplo</div>
+                </div>
+                <div class="espaco rabicho"></div>
+                <div class="espaco margem-fim"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-list" id="controle-editor">
+          <label>
+            Tamanho do código
+            <input type="range" min="12" max="26" step="0.5" data-css-var="--codigo-font-size" data-unit="px" />
+            <small>Afeta o texto maior da frente.</small>
+          </label>
+          <label>
+            Espaçamento do código
+            <input type="range" min="0" max="2" step="0.05" data-css-var="--codigo-letter-spacing" data-unit="px" />
+            <small>Controla o espaçamento entre letras.</small>
+          </label>
+          <label>
+            Tamanho da linha inferior
+            <input type="range" min="10" max="20" step="0.5" data-css-var="--linha-font-size" data-unit="px" />
+            <small>Peso e lojas.</small>
+          </label>
+          <label>
+            Espaçamento entre peso/lojas
+            <input type="range" min="0" max="18" step="1" data-css-var="--linha-gap" data-unit="px" />
+          </label>
+          <label>
+            Tamanho do fornecedor
+            <input type="range" min="10" max="20" step="0.5" data-css-var="--fornecedor-font-size" data-unit="px" />
+          </label>
+          <label>
+            Altura do código de barras
+            <input type="range" min="20" max="80" step="1" data-css-var="--barcode-height" data-unit="px" />
+          </label>
+          <label>
+            Espaçamento interno
+            <input type="range" min="0" max="14" step="1" data-css-var="--face-padding" data-unit="px" />
+            <small>Afeta frente e verso.</small>
+          </label>
+          <label>
+            Distância vertical
+            <input type="range" min="-12" max="12" step="1" data-css-var="--face-offset" data-unit="px" />
+            <small>Move o conteúdo para cima ou para baixo.</small>
+          </label>
+        </div>
+      </div>
+
+      <div class="ajustes-log" aria-live="polite">
+        <h3>Relatório de ajustes</h3>
+        <ul id="ajustes-log-list">
+          <li>Nenhum ajuste realizado ainda.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script>
     const form = document.getElementById('label-form');
     const enviarBtn = document.getElementById('enviar');
     const imprimirBtn = document.getElementById('imprimir');
     const resetarBtn = document.getElementById('resetar');
+
+    const pageButtons = document.querySelectorAll('[data-page-target]');
+    const pages = document.querySelectorAll('.page');
 
     const codigoInput = document.getElementById('codigo');
     const pesoInput = document.getElementById('peso');
@@ -421,6 +622,19 @@
     const lojaInputs = Array.from(document.querySelectorAll('input[name="loja"]'));
 
     const labelsList = document.getElementById('labels-list');
+    const controleEditor = document.getElementById('controle-editor');
+    const ajustesLogList = document.getElementById('ajustes-log-list');
+
+    const nomeVariaveis = {
+      '--codigo-font-size': 'Tamanho do código',
+      '--codigo-letter-spacing': 'Espaçamento do código',
+      '--linha-font-size': 'Linha inferior',
+      '--linha-gap': 'Gap linha inferior',
+      '--fornecedor-font-size': 'Fornecedor',
+      '--barcode-height': 'Altura do código de barras',
+      '--face-padding': 'Espaçamento interno',
+      '--face-offset': 'Distância vertical',
+    };
 
     function placeholderMensagem() {
       const placeholder = document.createElement('p');
@@ -444,6 +658,67 @@
       if (!peso) return '';
       return /g$/i.test(peso) ? peso : `${peso}g`;
     }
+
+    function alturaCodigoBarras() {
+      const altura = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--barcode-height'));
+      return Number.isNaN(altura) ? 32 : altura;
+    }
+
+    function registrarAjuste(varName, valor) {
+      if (!ajustesLogList) return;
+      if (ajustesLogList.firstElementChild && ajustesLogList.children.length === 1 && ajustesLogList.firstElementChild.textContent.includes('Nenhum')) {
+        ajustesLogList.innerHTML = '';
+      }
+
+      const item = document.createElement('li');
+      const horario = new Date().toLocaleTimeString('pt-BR', { hour12: false });
+      const nome = nomeVariaveis[varName] || varName;
+      item.textContent = `[${horario}] ${nome}: ${valor}`;
+      ajustesLogList.prepend(item);
+    }
+
+    function aplicarVariavel(input) {
+      const varName = input.dataset.cssVar;
+      if (!varName) return;
+
+      const unit = input.dataset.unit || '';
+      const valor = `${input.value}${unit}`;
+      document.documentElement.style.setProperty(varName, valor);
+      registrarAjuste(varName, valor);
+    }
+
+    function preencherValoresIniciais() {
+      if (!controleEditor) return;
+
+      const estilos = getComputedStyle(document.documentElement);
+      const inputs = Array.from(controleEditor.querySelectorAll('input'));
+
+      inputs.forEach((input) => {
+        const varName = input.dataset.cssVar;
+        const valorAtual = estilos.getPropertyValue(varName).trim();
+        const numero = parseFloat(valorAtual);
+        if (!Number.isNaN(numero)) {
+          input.value = numero;
+        }
+
+        input.addEventListener('input', () => aplicarVariavel(input));
+      });
+    }
+
+    function alternarPagina(id) {
+      pages.forEach((page) => page.classList.toggle('active', page.id === id));
+      pageButtons.forEach((btn) => {
+        const ativa = btn.dataset.pageTarget === id;
+        btn.classList.toggle('active', ativa);
+        btn.setAttribute('aria-selected', ativa);
+      });
+    }
+
+    pageButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        alternarPagina(btn.dataset.pageTarget);
+      });
+    });
 
     function gerarEtiqueta({ codigo, peso, lojas, fornecedor }) {
       if (!codigo) return;
@@ -514,7 +789,7 @@
         displayValue: false,
         lineColor: '#111827',
         width: 1.6,
-        height: 32,
+        height: alturaCodigoBarras(),
         margin: 2,
       });
     }
@@ -522,6 +797,9 @@
     function imprimirEtiquetas() {
       const etiquetas = labelsList.querySelectorAll('.label-layout');
       if (!etiquetas.length || labelsList.querySelector('.placeholder')) return;
+
+      const estilos = getComputedStyle(document.documentElement);
+      const valorVar = (nome) => estilos.getPropertyValue(nome).trim();
 
       const estilosImpressao = `
         :root {
@@ -532,6 +810,15 @@
           --rabicho: 3.5cm;
           --margin-fim: 0.2cm;
           --total-largura: calc(var(--margin-inicio) + var(--frente) + var(--verso) + var(--rabicho) + var(--margin-fim));
+          --face-padding: ${valorVar('--face-padding')};
+          --face-gap: ${valorVar('--face-gap')};
+          --codigo-font-size: ${valorVar('--codigo-font-size')};
+          --codigo-letter-spacing: ${valorVar('--codigo-letter-spacing')};
+          --linha-font-size: ${valorVar('--linha-font-size')};
+          --linha-gap: ${valorVar('--linha-gap')};
+          --fornecedor-font-size: ${valorVar('--fornecedor-font-size')};
+          --barcode-height: ${valorVar('--barcode-height')};
+          --face-offset: ${valorVar('--face-offset')};
         }
 
         * {
@@ -565,13 +852,14 @@
         }
 
         .face {
-          padding: 4px 6px;
+          padding: var(--face-padding) 6px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          gap: 4px;
+          gap: var(--face-gap);
           height: 100%;
           overflow: hidden;
+          transform: translateY(var(--face-offset));
         }
 
         .face.frente {
@@ -584,8 +872,8 @@
         }
 
         .codigo-maior {
-          font-size: 0.95rem;
-          letter-spacing: 0.25px;
+          font-size: var(--codigo-font-size);
+          letter-spacing: var(--codigo-letter-spacing);
           font-weight: 700;
           color: #0f172a;
           line-height: 1.1;
@@ -594,8 +882,8 @@
         .linha-inferior {
           display: flex;
           align-items: center;
-          gap: 6px;
-          font-size: 0.8rem;
+          gap: var(--linha-gap);
+          font-size: var(--linha-font-size);
           color: #0f172a;
           font-weight: 600;
           white-space: nowrap;
@@ -614,11 +902,11 @@
 
         .barcode-wrapper svg {
           width: 100%;
-          height: 32px;
+          height: var(--barcode-height);
         }
 
         .fornecedor {
-          font-size: 0.75rem;
+          font-size: var(--fornecedor-font-size);
           color: #0f172a;
           font-weight: 600;
           white-space: nowrap;
@@ -674,6 +962,23 @@
       lojaInputs.forEach((input) => (input.checked = false));
       codigoInput.focus();
     }
+
+    function inicializarPreviewEditor() {
+      const svgPreview = document.getElementById('preview-barcode');
+      if (!svgPreview) return;
+
+      JsBarcode(svgPreview, 'AN1020', {
+        format: 'CODE128',
+        displayValue: false,
+        lineColor: '#111827',
+        width: 1.6,
+        height: alturaCodigoBarras(),
+        margin: 2,
+      });
+    }
+
+    preencherValoresIniciais();
+    inicializarPreviewEditor();
 
     enviarBtn.addEventListener('click', adicionarEtiquetas);
 
