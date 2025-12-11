@@ -58,6 +58,34 @@
       gap: 12px;
     }
 
+    .nav-brand {
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .nav-tab {
+      background: transparent;
+      color: #e2e8f0;
+      border: 1px solid transparent;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+    }
+
+    .nav-tab.active {
+      background: #111827;
+      border-color: #1f2937;
+      color: #fff;
+    }
+
     .page {
       max-width: 1280px;
       margin: 24px auto;
@@ -307,8 +335,15 @@
       justify-content: space-between;
     }
 
+    .detalhe-principal {
+      margin-left: 8px;
+      font-weight: 700;
+    }
+
     .loja-texto {
       margin-left: auto;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .barcode-wrapper {
@@ -368,6 +403,84 @@
     .badge strong {
       font-size: 1.25rem;
       color: #0f172a;
+    }
+
+    .input-prefix-group {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .input-prefix {
+      padding: 10px 12px;
+      background: #e2e8f0;
+      color: #0f172a;
+      font-weight: 700;
+      border-right: 1px solid #cbd5e1;
+    }
+
+    .input-prefix-group input {
+      border: none;
+      padding: 10px 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .codigo-fixo-input {
+      text-align: center;
+      font-size: 1.05rem;
+      letter-spacing: 0.2px;
+    }
+
+    .tabela-precos {
+      display: grid;
+      gap: 12px;
+    }
+
+    .precos-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .preco-row {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: #f8fafc;
+    }
+
+    .preco-row-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      align-items: center;
+    }
+
+    .preco-row label {
+      margin: 0;
+    }
+
+    .preco-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-ghost {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-ghost:hover {
+      background: #cbd5e1;
     }
 
     .editar-btn {
@@ -507,177 +620,274 @@
   <body>
     <header>
       <nav aria-label="Menu superior">
-        <span>Gerador de etiquetas</span>
+        <div class="nav-brand">Gerador de etiquetas</div>
+        <div class="nav-tabs" role="tablist">
+          <button class="nav-tab active" data-target="page-ouro" id="page-ouro-tab" role="tab" aria-controls="page-ouro">Etiquetas de Ouro</button>
+          <button class="nav-tab" data-target="page-prata" id="page-prata-tab" role="tab" aria-controls="page-prata">Etiquetas de Prata</button>
+        </div>
       </nav>
     </header>
 
-    <main id="page-gerador" class="page active" role="tabpanel" aria-labelledby="page-gerador-tab">
+    <main id="page-ouro" class="page active" role="tabpanel" aria-labelledby="page-ouro-tab">
       <section class="card dados">
         <div>
-          <h2>Dados</h2>
-        <p class="help">Preencha as informações e envie para visualizar a etiqueta.</p>
-      </div>
-
-      <form id="label-form">
-        <fieldset>
-          <legend>Frente</legend>
-          <div class="input-row">
-            <label for="codigo">Código
-              <input type="text" id="codigo" name="codigo" autocomplete="off" placeholder="Digite o código" required />
-            </label>
-
-            <label for="peso">Peso
-              <input type="text" id="peso" name="peso" autocomplete="off" placeholder="Digite o peso" />
-            </label>
-          </div>
-
-          <div>
-            <span style="font-weight: 600; color: #334155;">Loja</span>
-            <div class="lojas" role="group" aria-label="Seleção de loja">
-              <label><input type="checkbox" name="loja" value="C" />C</label>
-              <label><input type="checkbox" name="loja" value="E" />E</label>
-              <label><input type="checkbox" name="loja" value="A" />A</label>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Verso</legend>
-          <label for="fornecedor">Informações e Fornecedor</label>
-          <input type="text" id="fornecedor" name="fornecedor" autocomplete="off" placeholder="Digite o fornecedor" />
-        </fieldset>
-
-        <fieldset>
-          <legend>Informações</legend>
-          <label for="quantidade">Quantidade</label>
-          <input type="number" id="quantidade" name="quantidade" min="1" step="1" placeholder="" />
-        </fieldset>
-
-        <div class="actions">
-          <button type="button" id="enviar" class="btn-green">Enviar para etiqueta</button>
+          <h2>Etiquetas de Ouro</h2>
+          <p class="help">Preencha as informações e envie para visualizar a etiqueta.</p>
         </div>
-      </form>
-    </section>
 
-    <section class="card visualizador">
-      <div class="preview-container">
-        <div class="visualizador-header">
-          <div>
-            <h2>Visualizador de impressão</h2>
-            <div class="badge" aria-live="polite">
-              <div>
-                <span>Prontas para impressão</span>
-                <small><span id="contador-etiquetas">0</span> etiquetas / <span id="contador-paginas">0</span> páginas</small>
+        <form id="label-form">
+          <fieldset>
+            <legend>Frente</legend>
+            <div class="input-row">
+              <label for="codigo">Código
+                <input type="text" id="codigo" name="codigo" autocomplete="off" placeholder="Digite o código" required />
+              </label>
+
+              <label for="peso">Peso
+                <input type="text" id="peso" name="peso" autocomplete="off" placeholder="Digite o peso" />
+              </label>
+            </div>
+
+            <div>
+              <span style="font-weight: 600; color: #334155;">Loja</span>
+              <div class="lojas" role="group" aria-label="Seleção de loja">
+                <label><input type="checkbox" name="loja" value="C" />C</label>
+                <label><input type="checkbox" name="loja" value="E" />E</label>
+                <label><input type="checkbox" name="loja" value="A" />A</label>
               </div>
             </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Verso</legend>
+            <label for="fornecedor">Informações e Fornecedor</label>
+            <input type="text" id="fornecedor" name="fornecedor" autocomplete="off" placeholder="Digite o fornecedor" />
+          </fieldset>
+
+          <fieldset>
+            <legend>Informações</legend>
+            <label for="quantidade">Quantidade</label>
+            <input type="number" id="quantidade" name="quantidade" min="1" step="1" placeholder="" />
+          </fieldset>
+
+          <div class="actions">
+            <button type="button" id="enviar" class="btn-green">Enviar para etiqueta</button>
           </div>
-          <div class="visualizador-actions">
-            <button type="button" id="editar" class="editar-btn">Editar</button>
-            <button type="button" id="resetar" class="btn-orange">Resetar</button>
-            <button type="button" id="imprimir" class="btn-green">Imprimir</button>
+        </form>
+      </section>
+
+      <section class="card visualizador">
+        <div class="preview-container">
+          <div class="visualizador-header">
+            <div>
+              <h2>Visualizador de impressão</h2>
+              <div class="badge" aria-live="polite">
+                <div>
+                  <span>Prontas para impressão</span>
+                  <small><span id="contador-etiquetas">0</span> etiquetas / <span id="contador-paginas">0</span> páginas</small>
+                </div>
+              </div>
+            </div>
+            <div class="visualizador-actions">
+              <button type="button" id="editar" class="editar-btn">Editar</button>
+              <button type="button" id="resetar" class="btn-orange">Resetar</button>
+              <button type="button" id="imprimir" class="btn-green">Imprimir</button>
+            </div>
+          </div>
+
+          <div class="label-preview" aria-live="polite">
+            <div class="labels-list" id="labels-list">
+              <p class="placeholder">Envie dados para ver as etiquetas empilhadas.</p>
+            </div>
           </div>
         </div>
+      </section>
+    </main>
 
-        <div class="label-preview" aria-live="polite">
-          <div class="labels-list" id="labels-list">
-            <p class="placeholder">Envie dados para ver as etiquetas empilhadas.</p>
+    <main id="page-prata" class="page" role="tabpanel" aria-labelledby="page-prata-tab">
+      <section class="card dados">
+        <div>
+          <h2>Etiquetas de Prata</h2>
+          <p class="help">Cadastre um lote com preços diferentes e o mesmo código de barras.</p>
+        </div>
+
+        <form id="lote-form">
+          <fieldset>
+            <legend>Frente</legend>
+            <label for="codigo-fixo">Código fixo</label>
+            <input type="text" id="codigo-fixo" name="codigo-fixo" class="codigo-fixo-input" autocomplete="off" placeholder="Digite o código do lote" required />
+
+            <div class="input-row">
+              <label for="preco-lote">Preço
+                <div class="input-prefix-group">
+                  <span class="input-prefix">R$</span>
+                  <input type="number" step="0.01" min="0" id="preco-lote" name="preco-lote" autocomplete="off" placeholder="199,00" />
+                </div>
+              </label>
+
+              <label for="quantidade-preco">Quantidade</label>
+              <input type="number" id="quantidade-preco" name="quantidade-preco" min="1" step="1" value="1" />
+            </div>
+
+            <div class="actions" style="justify-content: flex-start;">
+              <button type="button" id="adicionar-preco" class="btn-green" aria-label="Adicionar preço ao lote">Adicionar preço</button>
+            </div>
+
+            <div>
+              <span style="font-weight: 600; color: #334155;">Loja</span>
+              <div class="lojas" role="group" aria-label="Seleção de loja">
+                <label><input type="checkbox" name="loja-prata" value="C" />C</label>
+                <label><input type="checkbox" name="loja-prata" value="E" />E</label>
+                <label><input type="checkbox" name="loja-prata" value="A" />A</label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Verso</legend>
+            <label for="fornecedor-prata">Informações e Fornecedor</label>
+            <input type="text" id="fornecedor-prata" name="fornecedor-prata" autocomplete="off" placeholder="Digite o fornecedor" />
+          </fieldset>
+
+          <div class="actions">
+            <button type="button" id="enviar-lote" class="btn-green">Enviar Lote para Etiqueta</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card tabela-card">
+        <div class="tabela-precos">
+          <div>
+            <h2>Preços cadastrados</h2>
+            <p class="help">Edite, exclua e ajuste a quantidade antes de enviar o lote.</p>
+          </div>
+          <div class="precos-list" id="lista-precos">
+            <p class="placeholder">Adicione um preço para montar o lote.</p>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <div class="modal-backdrop" id="modal-edicao" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
-    <div class="modal">
-      <header>
-        <h3 id="modal-titulo">Editar etiquetas</h3>
-        <p class="help" style="margin: 4px 0 0;">Selecione as etiquetas que deseja remover.</p>
-      </header>
-      <div class="modal-lista" id="lista-edicao"></div>
-      <div class="modal-actions">
-        <button type="button" id="cancelar-edicao">Cancelar</button>
-        <button type="button" id="remover-selecionadas" class="btn-orange">Remover selecionadas</button>
+      <section class="card visualizador">
+        <div class="preview-container">
+          <div class="visualizador-header">
+            <div>
+              <h2>Visualizador de impressão</h2>
+              <div class="badge" aria-live="polite">
+                <div>
+                  <span>Prontas para impressão</span>
+                  <small><span id="contador-etiquetas-prata">0</span> etiquetas / <span id="contador-paginas-prata">0</span> páginas</small>
+                </div>
+              </div>
+            </div>
+            <div class="visualizador-actions">
+              <button type="button" id="editar-prata" class="editar-btn">Editar</button>
+              <button type="button" id="resetar-prata" class="btn-orange">Resetar</button>
+              <button type="button" id="imprimir-prata" class="btn-green">Imprimir</button>
+            </div>
+          </div>
+
+          <div class="label-preview" aria-live="polite">
+            <div class="labels-list" id="labels-list-prata">
+              <p class="placeholder">Envie dados para ver as etiquetas empilhadas.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-backdrop" id="modal-edicao" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <div class="modal">
+        <header>
+          <h3 id="modal-titulo">Editar etiquetas</h3>
+          <p class="help" style="margin: 4px 0 0;">Selecione as etiquetas que deseja remover.</p>
+        </header>
+        <div class="modal-lista" id="lista-edicao"></div>
+        <div class="modal-actions">
+          <button type="button" id="cancelar-edicao">Cancelar</button>
+          <button type="button" id="remover-selecionadas" class="btn-orange">Remover selecionadas</button>
+        </div>
       </div>
     </div>
-  </div>
+
+    <div class="modal-backdrop" id="modal-edicao-prata" role="dialog" aria-modal="true" aria-labelledby="modal-titulo-prata">
+      <div class="modal">
+        <header>
+          <h3 id="modal-titulo-prata">Editar etiquetas</h3>
+          <p class="help" style="margin: 4px 0 0;">Selecione as etiquetas que deseja remover.</p>
+        </header>
+        <div class="modal-lista" id="lista-edicao-prata"></div>
+        <div class="modal-actions">
+          <button type="button" id="cancelar-edicao-prata">Cancelar</button>
+          <button type="button" id="remover-selecionadas-prata" class="btn-orange">Remover selecionadas</button>
+        </div>
+      </div>
+    </div>
 
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script>
-    const form = document.getElementById('label-form');
-    const enviarBtn = document.getElementById('enviar');
-    const imprimirBtn = document.getElementById('imprimir');
-    const resetarBtn = document.getElementById('resetar');
-    const editarBtn = document.getElementById('editar');
-    const modal = document.getElementById('modal-edicao');
-    const listaEdicao = document.getElementById('lista-edicao');
-    const cancelarEdicaoBtn = document.getElementById('cancelar-edicao');
-    const removerSelecionadasBtn = document.getElementById('remover-selecionadas');
-    const contadorEtiquetas = document.getElementById('contador-etiquetas');
-    const contadorPaginas = document.getElementById('contador-paginas');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const pages = document.querySelectorAll('.page');
 
-    const codigoInput = document.getElementById('codigo');
-    const pesoInput = document.getElementById('peso');
-    const fornecedorInput = document.getElementById('fornecedor');
-    const quantidadeInput = document.getElementById('quantidade');
-    const lojaInputs = Array.from(document.querySelectorAll('input[name="loja"]'));
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const alvo = tab.dataset.target;
+        tabs.forEach((btn) => btn.classList.toggle('active', btn === tab));
+        pages.forEach((page) => page.classList.toggle('active', page.id === alvo));
+      });
+    });
 
-    const labelsList = document.getElementById('labels-list');
-    const labelsData = [];
-    let labelIdCounter = 1;
-
-    function placeholderMensagem() {
-      labelsList.innerHTML = '';
+    function placeholderMensagem(lista) {
+      lista.innerHTML = '';
       const placeholder = document.createElement('p');
       placeholder.textContent = 'Envie dados para ver as etiquetas empilhadas.';
       placeholder.className = 'placeholder';
-      labelsList.appendChild(placeholder);
+      lista.appendChild(placeholder);
     }
 
-    function garantirPlaceholder() {
-      if (!labelsData.length) {
-        placeholderMensagem();
+    function garantirPlaceholder(lista, dados) {
+      if (!dados.length) {
+        placeholderMensagem(lista);
       }
     }
 
-    function atualizarContador() {
-      const total = labelsData.length;
-      contadorEtiquetas.textContent = total;
-      contadorPaginas.textContent = total;
+    function limparLista(lista, dados, contador, paginas) {
+      lista.innerHTML = '';
+      dados.length = 0;
+      placeholderMensagem(lista);
+      atualizarContador(dados, contador, paginas);
     }
 
-    function limparLista() {
-      labelsData.length = 0;
-      labelIdCounter = 1;
-      placeholderMensagem();
-      atualizarContador();
+    function atualizarContador(dados, contador, paginas) {
+      contador.textContent = dados.length;
+      paginas.textContent = Math.ceil(dados.length / 2);
     }
 
-    function lojasSelecionadas() {
-      const selecionadas = lojaInputs.filter((input) => input.checked).map((input) => input.value);
-      return selecionadas.join(' ');
+    function lojasSelecionadas(inputs) {
+      const selecionadas = inputs.filter((input) => input.checked).map((input) => input.value);
+      return selecionadas.length ? selecionadas.join(' - ') : '';
     }
 
-    function formatarPeso(valor) {
-      const peso = valor.trim().replace(',', '.');
+    function formatarPeso(peso) {
       if (!peso) return '';
+      const numero = Number(peso.toString().replace(',', '.'));
+      if (Number.isNaN(numero)) return peso;
 
-      const numero = Number.parseFloat(peso);
-      if (Number.isNaN(numero)) return '';
+      return `${numero.toFixed(3).replace('.', ',')}g`;
+    }
 
-      const valorFormatado = numero.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-
-      return `${valorFormatado}g`;
+    function formatarPreco(preco) {
+      if (preco === undefined || preco === null || preco === '') return '';
+      const numero = Number(preco.toString().replace(',', '.'));
+      if (Number.isNaN(numero)) return preco;
+      return `R$: ${numero.toFixed(2).replace('.', ',')}`;
     }
 
     function alturaCodigoBarras() {
-      const altura = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--barcode-height'));
+      const altura = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--label-height')) * 7.2;
       return Number.isNaN(altura) ? 32 : altura;
     }
 
-    function gerarEtiqueta({ id, codigo, peso, lojas, fornecedor }) {
+    function gerarEtiquetaOuro({ id, codigo, peso, lojas, fornecedor }, lista) {
       if (!codigo) return;
 
       const etiqueta = document.createElement('div');
@@ -696,6 +906,7 @@
       const linhaInferior = document.createElement('div');
       linhaInferior.className = 'linha-inferior';
       const pesoSpan = document.createElement('span');
+      pesoSpan.className = 'detalhe-principal';
       pesoSpan.textContent = peso;
       const lojaSpan = document.createElement('span');
       lojaSpan.className = 'loja-texto';
@@ -732,7 +943,7 @@
       etiqueta.appendChild(rabicho);
       etiqueta.appendChild(margemFim);
 
-      labelsList.appendChild(etiqueta);
+      lista.appendChild(etiqueta);
 
       JsBarcode(svg, codigo, {
         format: 'CODE128',
@@ -744,10 +955,78 @@
       });
     }
 
-    function imprimirEtiquetas() {
-      if (!labelsData.length) return;
+    function gerarEtiquetaPrata({ id, codigo, preco, lojas, fornecedor }, lista) {
+      if (!codigo) return;
 
-      const etiquetas = labelsList.querySelectorAll('.label-layout');
+      const etiqueta = document.createElement('div');
+      etiqueta.className = 'label-layout';
+      etiqueta.dataset.labelId = id;
+
+      const margemInicio = document.createElement('div');
+      margemInicio.className = 'espaco margem-inicio';
+
+      const frente = document.createElement('div');
+      frente.className = 'face frente';
+      const precoFrente = document.createElement('div');
+      precoFrente.className = 'codigo-maior';
+      precoFrente.textContent = formatarPreco(preco);
+
+      const linhaInferior = document.createElement('div');
+      linhaInferior.className = 'linha-inferior';
+      const codigoSpan = document.createElement('span');
+      codigoSpan.className = 'detalhe-principal';
+      codigoSpan.textContent = codigo;
+      const lojaSpan = document.createElement('span');
+      lojaSpan.className = 'loja-texto';
+      lojaSpan.textContent = lojas;
+      const detalhes = [codigoSpan, lojaSpan].filter((el) => el.textContent);
+      detalhes.forEach((el) => linhaInferior.appendChild(el));
+
+      frente.appendChild(precoFrente);
+      frente.appendChild(linhaInferior);
+
+      const verso = document.createElement('div');
+      verso.className = 'face verso';
+      const barcodeWrapper = document.createElement('div');
+      barcodeWrapper.className = 'barcode-wrapper';
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      barcodeWrapper.appendChild(svg);
+
+      const fornecedorEl = document.createElement('div');
+      fornecedorEl.className = 'fornecedor';
+      fornecedorEl.textContent = fornecedor;
+
+      verso.appendChild(barcodeWrapper);
+      verso.appendChild(fornecedorEl);
+
+      const rabicho = document.createElement('div');
+      rabicho.className = 'espaco rabicho';
+
+      const margemFim = document.createElement('div');
+      margemFim.className = 'espaco margem-fim';
+
+      etiqueta.appendChild(margemInicio);
+      etiqueta.appendChild(frente);
+      etiqueta.appendChild(verso);
+      etiqueta.appendChild(rabicho);
+      etiqueta.appendChild(margemFim);
+
+      lista.appendChild(etiqueta);
+
+      JsBarcode(svg, codigo, {
+        format: 'CODE128',
+        displayValue: false,
+        lineColor: '#111827',
+        width: 1.6,
+        height: alturaCodigoBarras(),
+        margin: 2,
+      });
+    }
+
+    function imprimirEtiquetas(lista, dados) {
+      if (!dados.length) return;
+
+      const etiquetas = lista.querySelectorAll('.label-layout');
       if (!etiquetas.length) return;
 
       const estilos = getComputedStyle(document.documentElement);
@@ -850,6 +1129,13 @@
 
         .loja-texto {
           margin-left: auto;
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .detalhe-principal {
+          margin-left: 8px;
+          font-weight: 700;
         }
 
         .barcode-wrapper {
@@ -887,9 +1173,7 @@
 
       const printWindow = window.open('', '_blank');
       const printDocument = printWindow.document;
-      printDocument.write(
-        `<!DOCTYPE html><html lang="pt-BR"><head><title>Impressão de etiquetas</title><style>${estilosImpressao}</style></head><body></body></html>`
-      );
+      printDocument.write(`<!DOCTYPE html><html lang="pt-BR"><head><title>Impressão de etiquetas</title><style>${estilosImpressao}</style></head><body></body></html>`);
 
       const corpo = printDocument.body;
       etiquetas.forEach((etiqueta) => {
@@ -904,43 +1188,39 @@
       });
     }
 
-    function adicionarEtiquetas() {
-      if (!form.reportValidity()) return;
+    // Ouro
+    const form = document.getElementById('label-form');
+    const enviarBtn = document.getElementById('enviar');
+    const imprimirBtn = document.getElementById('imprimir');
+    const resetarBtn = document.getElementById('resetar');
+    const editarBtn = document.getElementById('editar');
+    const modal = document.getElementById('modal-edicao');
+    const listaEdicao = document.getElementById('lista-edicao');
+    const cancelarEdicaoBtn = document.getElementById('cancelar-edicao');
+    const removerSelecionadasBtn = document.getElementById('remover-selecionadas');
+    const contadorEtiquetas = document.getElementById('contador-etiquetas');
+    const contadorPaginas = document.getElementById('contador-paginas');
 
-      const codigo = codigoInput.value.trim();
-      const peso = formatarPeso(pesoInput.value);
-      const fornecedor = fornecedorInput.value.trim();
-      const lojas = lojasSelecionadas();
-      const quantidade = Math.max(1, Number.parseInt(quantidadeInput.value, 10) || 1);
+    const codigoInput = document.getElementById('codigo');
+    const pesoInput = document.getElementById('peso');
+    const fornecedorInput = document.getElementById('fornecedor');
+    const quantidadeInput = document.getElementById('quantidade');
+    const lojaInputs = Array.from(document.querySelectorAll('input[name="loja"]'));
 
-      if (!labelsData.length && labelsList.querySelector('.placeholder')) {
-        labelsList.innerHTML = '';
-      }
+    const labelsList = document.getElementById('labels-list');
+    const labelsData = [];
+    let labelIdCounter = 1;
 
-      Array.from({ length: quantidade }).forEach(() => {
-        const id = labelIdCounter++;
-        labelsData.push({ id, codigo, peso, lojas, fornecedor });
-        gerarEtiqueta({ id, codigo, peso, lojas, fornecedor });
-      });
+    function atualizarModalEdicao(dados, lista) {
+      lista.innerHTML = '';
 
-      codigoInput.value = '';
-      pesoInput.value = '';
-      quantidadeInput.value = '';
-      codigoInput.focus();
-
-      atualizarContador();
-    }
-
-    function abrirModalEdicao() {
-      listaEdicao.innerHTML = '';
-
-      if (!labelsData.length) {
+      if (!dados.length) {
         const aviso = document.createElement('p');
         aviso.className = 'help';
         aviso.textContent = 'Nenhuma etiqueta disponível para edição.';
-        listaEdicao.appendChild(aviso);
+        lista.appendChild(aviso);
       } else {
-        labelsData.forEach(({ id, codigo, peso, lojas, fornecedor }) => {
+        dados.forEach(({ id, codigo, peso, lojas, fornecedor }) => {
           const label = document.createElement('label');
           label.className = 'modal-item';
 
@@ -961,10 +1241,40 @@
           label.appendChild(checkbox);
           label.appendChild(detalhes);
 
-          listaEdicao.appendChild(label);
+          lista.appendChild(label);
         });
       }
+    }
 
+    function adicionarEtiquetas() {
+      if (!form.reportValidity()) return;
+
+      const codigo = codigoInput.value.trim();
+      const peso = formatarPeso(pesoInput.value);
+      const fornecedor = fornecedorInput.value.trim();
+      const lojas = lojasSelecionadas(lojaInputs);
+      const quantidade = Math.max(1, Number.parseInt(quantidadeInput.value, 10) || 1);
+
+      if (!labelsData.length && labelsList.querySelector('.placeholder')) {
+        labelsList.innerHTML = '';
+      }
+
+      Array.from({ length: quantidade }).forEach(() => {
+        const id = labelIdCounter++;
+        labelsData.push({ id, codigo, peso, lojas, fornecedor });
+        gerarEtiquetaOuro({ id, codigo, peso, lojas, fornecedor }, labelsList);
+      });
+
+      codigoInput.value = '';
+      pesoInput.value = '';
+      quantidadeInput.value = '';
+      codigoInput.focus();
+
+      atualizarContador(labelsData, contadorEtiquetas, contadorPaginas);
+    }
+
+    function abrirModalEdicao() {
+      atualizarModalEdicao(labelsData, listaEdicao);
       modal.classList.add('open');
     }
 
@@ -989,17 +1299,18 @@
         if (etiqueta) etiqueta.remove();
       });
 
-      atualizarContador();
-      garantirPlaceholder();
+      atualizarContador(labelsData, contadorEtiquetas, contadorPaginas);
+      garantirPlaceholder(labelsList, labelsData);
       fecharModalEdicao();
     }
 
     enviarBtn.addEventListener('click', adicionarEtiquetas);
 
-    imprimirBtn.addEventListener('click', imprimirEtiquetas);
+    imprimirBtn.addEventListener('click', () => imprimirEtiquetas(labelsList, labelsData));
 
     resetarBtn.addEventListener('click', () => {
-      limparLista();
+      labelIdCounter = 1;
+      limparLista(labelsList, labelsData, contadorEtiquetas, contadorPaginas);
       form.reset();
       codigoInput.focus();
     });
@@ -1008,8 +1319,235 @@
     cancelarEdicaoBtn.addEventListener('click', fecharModalEdicao);
     removerSelecionadasBtn.addEventListener('click', removerSelecionadas);
 
-    placeholderMensagem();
-    atualizarContador();
+    placeholderMensagem(labelsList);
+    atualizarContador(labelsData, contadorEtiquetas, contadorPaginas);
+
+    // Prata
+    const loteForm = document.getElementById('lote-form');
+    const codigoFixoInput = document.getElementById('codigo-fixo');
+    const precoLoteInput = document.getElementById('preco-lote');
+    const quantidadePrecoInput = document.getElementById('quantidade-preco');
+    const fornecedorPrataInput = document.getElementById('fornecedor-prata');
+    const adicionarPrecoBtn = document.getElementById('adicionar-preco');
+    const enviarLoteBtn = document.getElementById('enviar-lote');
+    const lojaPrataInputs = Array.from(document.querySelectorAll('input[name="loja-prata"]'));
+
+    const labelsListPrata = document.getElementById('labels-list-prata');
+    const contadorEtiquetasPrata = document.getElementById('contador-etiquetas-prata');
+    const contadorPaginasPrata = document.getElementById('contador-paginas-prata');
+    const editarBtnPrata = document.getElementById('editar-prata');
+    const resetarBtnPrata = document.getElementById('resetar-prata');
+    const imprimirBtnPrata = document.getElementById('imprimir-prata');
+    const listaEdicaoPrata = document.getElementById('lista-edicao-prata');
+    const modalPrata = document.getElementById('modal-edicao-prata');
+    const cancelarEdicaoPrataBtn = document.getElementById('cancelar-edicao-prata');
+    const removerSelecionadasPrataBtn = document.getElementById('remover-selecionadas-prata');
+    const listaPrecos = document.getElementById('lista-precos');
+
+    const labelsDataPrata = [];
+    let labelIdCounterPrata = 1;
+    const precosLote = [];
+    let precoIdCounter = 1;
+
+    function renderTabelaPrecos() {
+      listaPrecos.innerHTML = '';
+
+      if (!precosLote.length) {
+        const placeholder = document.createElement('p');
+        placeholder.className = 'placeholder';
+        placeholder.textContent = 'Adicione um preço para montar o lote.';
+        listaPrecos.appendChild(placeholder);
+        return;
+      }
+
+      precosLote.forEach(({ id, preco, quantidade }) => {
+        const row = document.createElement('div');
+        row.className = 'preco-row';
+
+        const fields = document.createElement('div');
+        fields.className = 'preco-row-fields';
+
+        const precoLabel = document.createElement('label');
+        precoLabel.textContent = 'Preço';
+        const precoGroup = document.createElement('div');
+        precoGroup.className = 'input-prefix-group';
+        const prefixo = document.createElement('span');
+        prefixo.className = 'input-prefix';
+        prefixo.textContent = 'R$';
+        const precoInput = document.createElement('input');
+        precoInput.type = 'number';
+        precoInput.min = '0';
+        precoInput.step = '0.01';
+        precoInput.value = preco;
+        precoInput.addEventListener('input', () => {
+          const numero = Number(precoInput.value);
+          if (!Number.isNaN(numero)) {
+            precoInput.value = numero;
+            const alvo = precosLote.find((item) => item.id === id);
+            if (alvo) alvo.preco = numero;
+          }
+        });
+        precoGroup.append(prefixo, precoInput);
+        precoLabel.appendChild(precoGroup);
+
+        const quantidadeLabel = document.createElement('label');
+        quantidadeLabel.textContent = 'Qtd';
+        const quantidadeInput = document.createElement('input');
+        quantidadeInput.type = 'number';
+        quantidadeInput.min = '1';
+        quantidadeInput.step = '1';
+        quantidadeInput.value = quantidade;
+        quantidadeInput.addEventListener('input', () => {
+          const numero = Math.max(1, Number.parseInt(quantidadeInput.value, 10) || 1);
+          quantidadeInput.value = numero;
+          const alvo = precosLote.find((item) => item.id === id);
+          if (alvo) alvo.quantidade = numero;
+        });
+        quantidadeLabel.appendChild(quantidadeInput);
+
+        fields.append(precoLabel, quantidadeLabel);
+
+        const actions = document.createElement('div');
+        actions.className = 'preco-actions';
+        const removerBtn = document.createElement('button');
+        removerBtn.type = 'button';
+        removerBtn.className = 'btn-ghost';
+        removerBtn.textContent = 'Excluir';
+        removerBtn.addEventListener('click', () => {
+          const index = precosLote.findIndex((item) => item.id === id);
+          if (index !== -1) {
+            precosLote.splice(index, 1);
+            renderTabelaPrecos();
+          }
+        });
+        actions.appendChild(removerBtn);
+
+        row.append(fields, actions);
+        listaPrecos.appendChild(row);
+      });
+    }
+
+    function adicionarPrecoAoLote() {
+      const precoValor = precoLoteInput.value.trim();
+      if (!precoValor) return;
+
+      const precoNumero = Number(precoValor.replace(',', '.'));
+      if (Number.isNaN(precoNumero)) return;
+
+      const quantidade = Math.max(1, Number.parseInt(quantidadePrecoInput.value, 10) || 1);
+
+      precosLote.push({ id: precoIdCounter++, preco: precoNumero, quantidade });
+      renderTabelaPrecos();
+
+      precoLoteInput.value = '';
+      quantidadePrecoInput.value = '1';
+    }
+
+    function adicionarEtiquetasPrata() {
+      if (!loteForm.reportValidity()) return;
+      if (!precosLote.length) return;
+
+      const codigo = codigoFixoInput.value.trim();
+      const lojas = lojasSelecionadas(lojaPrataInputs);
+      const fornecedor = fornecedorPrataInput.value.trim();
+
+      if (!labelsDataPrata.length && labelsListPrata.querySelector('.placeholder')) {
+        labelsListPrata.innerHTML = '';
+      }
+
+      precosLote.forEach(({ preco, quantidade }) => {
+        Array.from({ length: quantidade }).forEach(() => {
+          const id = labelIdCounterPrata++;
+          const precoFormatado = formatarPreco(preco);
+          labelsDataPrata.push({ id, codigo, preco: precoFormatado, lojas, fornecedor });
+          gerarEtiquetaPrata({ id, codigo, preco: precoFormatado, lojas, fornecedor }, labelsListPrata);
+        });
+      });
+
+      atualizarContador(labelsDataPrata, contadorEtiquetasPrata, contadorPaginasPrata);
+    }
+
+    function abrirModalEdicaoPrata() {
+      listaEdicaoPrata.innerHTML = '';
+
+      if (!labelsDataPrata.length) {
+        const aviso = document.createElement('p');
+        aviso.className = 'help';
+        aviso.textContent = 'Nenhuma etiqueta disponível para edição.';
+        listaEdicaoPrata.appendChild(aviso);
+      } else {
+        labelsDataPrata.forEach(({ id, codigo, preco, lojas, fornecedor }) => {
+          const label = document.createElement('label');
+          label.className = 'modal-item';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = id;
+
+          const detalhes = document.createElement('div');
+          const titulo = document.createElement('strong');
+          titulo.textContent = preco || 'Sem preço';
+          const info = document.createElement('small');
+          const partes = [codigo, lojas, fornecedor].filter(Boolean);
+          info.textContent = partes.join(' | ') || 'Sem detalhes adicionais';
+
+          detalhes.appendChild(titulo);
+          detalhes.appendChild(info);
+
+          label.appendChild(checkbox);
+          label.appendChild(detalhes);
+
+          listaEdicaoPrata.appendChild(label);
+        });
+      }
+
+      modalPrata.classList.add('open');
+    }
+
+    function fecharModalEdicaoPrata() {
+      modalPrata.classList.remove('open');
+    }
+
+    function removerSelecionadasPrata() {
+      const selecionadas = Array.from(listaEdicaoPrata.querySelectorAll('input:checked')).map((input) => Number(input.value));
+      if (!selecionadas.length) {
+        fecharModalEdicaoPrata();
+        return;
+      }
+
+      selecionadas.forEach((id) => {
+        const index = labelsDataPrata.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          labelsDataPrata.splice(index, 1);
+        }
+
+        const etiqueta = labelsListPrata.querySelector(`[data-label-id="${id}"]`);
+        if (etiqueta) etiqueta.remove();
+      });
+
+      atualizarContador(labelsDataPrata, contadorEtiquetasPrata, contadorPaginasPrata);
+      garantirPlaceholder(labelsListPrata, labelsDataPrata);
+      fecharModalEdicaoPrata();
+    }
+
+    adicionarPrecoBtn.addEventListener('click', adicionarPrecoAoLote);
+    enviarLoteBtn.addEventListener('click', adicionarEtiquetasPrata);
+    editarBtnPrata.addEventListener('click', abrirModalEdicaoPrata);
+    cancelarEdicaoPrataBtn.addEventListener('click', fecharModalEdicaoPrata);
+    removerSelecionadasPrataBtn.addEventListener('click', removerSelecionadasPrata);
+    resetarBtnPrata.addEventListener('click', () => {
+      labelIdCounterPrata = 1;
+      limparLista(labelsListPrata, labelsDataPrata, contadorEtiquetasPrata, contadorPaginasPrata);
+      precosLote.length = 0;
+      renderTabelaPrecos();
+      loteForm.reset();
+      codigoFixoInput.focus();
+    });
+    imprimirBtnPrata.addEventListener('click', () => imprimirEtiquetas(labelsListPrata, labelsDataPrata));
+
+    placeholderMensagem(labelsListPrata);
+    renderTabelaPrecos();
+    atualizarContador(labelsDataPrata, contadorEtiquetasPrata, contadorPaginasPrata);
   </script>
 </body>
 </html>
