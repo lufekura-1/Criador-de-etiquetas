@@ -534,14 +534,13 @@
     }
 
     .preco-prata {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       color: #0f172a;
       text-align: center;
     }
 
     .verso-prata {
-      position: relative;
       align-items: center;
       justify-content: center;
       gap: 6px;
@@ -566,19 +565,6 @@
       word-break: break-word;
     }
 
-    .codigo-verso-prata {
-      position: absolute;
-      right: 6px;
-      bottom: 4px;
-      font-size: 12px;
-      font-weight: 800;
-      max-width: 60%;
-      text-align: right;
-      letter-spacing: 0.3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
 
     .btn-ghost {
       background: #e2e8f0;
@@ -1105,14 +1091,6 @@
 
       verso.appendChild(versoConteudo);
 
-      const codigoCanto = (codigo || '').substring(0, 4);
-      if (codigoCanto) {
-        const codigoEl = document.createElement('div');
-        codigoEl.className = 'codigo-verso-prata';
-        codigoEl.textContent = codigoCanto;
-        verso.appendChild(codigoEl);
-      }
-
       const rabicho = document.createElement('div');
       rabicho.className = 'espaco rabicho';
 
@@ -1299,14 +1277,13 @@
         }
 
         .preco-prata {
-          font-size: 17px;
+          font-size: 16px;
           font-weight: 800;
           color: #0f172a;
           text-align: center;
         }
 
         .verso-prata {
-          position: relative;
           align-items: center;
           justify-content: center;
           gap: 6px;
@@ -1331,19 +1308,6 @@
           word-break: break-word;
         }
 
-        .codigo-verso-prata {
-          position: absolute;
-          right: 6px;
-          bottom: 4px;
-          font-size: 12px;
-          font-weight: 800;
-          max-width: 60%;
-          text-align: right;
-          letter-spacing: 0.3px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
 
         @page {
           size: 9.98cm 1.3cm;
