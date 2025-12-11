@@ -22,7 +22,7 @@
       --linha-font-size: 11px;
       --linha-gap: 6px;
       --fornecedor-font-size: 11px;
-      --barcode-height: 40px;
+      --barcode-height: 22px;
       --face-offset: 0px;
     }
 
@@ -368,7 +368,7 @@
     }
 
     .barcode-wrapper {
-      flex: 1;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -379,6 +379,7 @@
     .barcode-wrapper svg {
       width: 100%;
       height: var(--barcode-height);
+      max-height: calc(var(--label-height) - (var(--face-padding) * 2) - 18px);
     }
 
     .fornecedor {
