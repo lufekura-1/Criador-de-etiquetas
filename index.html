@@ -1103,7 +1103,8 @@
     }
 
     function gerarEtiquetaPrata({ id, codigo, preco, descricao, fornecedor }, lista) {
-      if (!codigo) return;
+      const codigoBarras = (codigo ?? '').toString().trim().toUpperCase();
+      if (!codigoBarras) return;
 
       const etiqueta = document.createElement('div');
       etiqueta.className = 'label-layout';
@@ -1143,7 +1144,7 @@
 
       const infoVerso = document.createElement('div');
       infoVerso.className = 'info-verso-prata';
-      const partesVerso = [fornecedor, codigo].filter(Boolean);
+      const partesVerso = [fornecedor, codigoBarras].filter(Boolean);
       infoVerso.textContent = partesVerso.join(' - ');
 
       versoConteudo.appendChild(barcodeWrapper);
@@ -1165,7 +1166,7 @@
 
       lista.appendChild(etiqueta);
 
-      renderizarCodigoBarras(svg, codigo, { width: 1.9, margin: 8 });
+      renderizarCodigoBarras(svg, codigoBarras, { width: 1.9, margin: 8 });
     }
 
     function imprimirEtiquetas(lista, dados) {
