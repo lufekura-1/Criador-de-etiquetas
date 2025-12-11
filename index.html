@@ -591,10 +591,10 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: stretch;
-      gap: 6px;
+      gap: 4px;
       width: 100%;
       height: 100%;
-      padding: 6px 8px 4px;
+      padding: 4px 8px 2px;
       text-align: left;
     }
 
@@ -603,14 +603,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 4px;
-      min-height: 0;
+      padding: 0 2px;
+      min-height: 20px;
     }
 
     .verso-prata .barcode-wrapper svg {
       width: 100%;
-      height: 100%;
-      max-height: calc(var(--label-height) - (var(--face-padding) * 2));
+      height: clamp(20px, 100%, calc(var(--label-height) - (var(--face-padding) * 2)));
     }
 
     .info-verso-prata {
@@ -1401,10 +1400,10 @@
           flex-direction: column;
           justify-content: space-between;
           align-items: stretch;
-          gap: 6px;
+          gap: 4px;
           width: 100%;
           height: 100%;
-          padding: 6px 8px 4px;
+          padding: 4px 8px 2px;
           text-align: left;
         }
 
@@ -1413,14 +1412,13 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 0 4px;
-          min-height: 0;
+          padding: 0 2px;
+          min-height: 20px;
         }
 
         .verso-prata .barcode-wrapper svg {
           width: 100%;
-          height: 100%;
-          max-height: calc(var(--label-height) - (var(--face-padding) * 2));
+          height: clamp(20px, 100%, calc(var(--label-height) - (var(--face-padding) * 2)));
         }
 
         .info-verso-prata {
