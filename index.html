@@ -1097,7 +1097,7 @@
 
       const infoVerso = document.createElement('div');
       infoVerso.className = 'info-verso-prata';
-      const partesVerso = [fornecedor, descricao, codigo].filter(Boolean);
+      const partesVerso = [fornecedor, codigo].filter(Boolean);
       infoVerso.textContent = partesVerso.join(' - ');
 
       versoConteudo.appendChild(barcodeWrapper);
