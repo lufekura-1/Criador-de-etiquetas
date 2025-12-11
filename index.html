@@ -186,6 +186,27 @@
       gap: 12px;
     }
 
+    .preco-quantidade-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .preco-quantidade-grid label {
+      height: 100%;
+    }
+
+    .preco-quantidade-action {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+
+    .preco-quantidade-action button {
+      width: 100%;
+    }
+
     .visualizador-header {
       display: flex;
       justify-content: space-between;
@@ -508,18 +529,55 @@
 
     .linha-prata {
       align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
     }
 
     .preco-prata {
       font-size: 17px;
       font-weight: 800;
       color: #0f172a;
+      text-align: center;
     }
 
-    .codigo-prata {
-      margin-left: auto;
-      font-size: 13px;
+    .verso-prata {
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .verso-prata-conteudo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .info-verso-prata {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+      padding: 0 8px;
+      word-break: break-word;
+    }
+
+    .codigo-verso-prata {
+      position: absolute;
+      right: 6px;
+      bottom: 4px;
+      font-size: 12px;
       font-weight: 800;
+      max-width: 60%;
+      text-align: right;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .btn-ghost {
@@ -768,7 +826,7 @@
             <label for="descricao-lote">Descrição do lote</label>
             <input type="text" id="descricao-lote" name="descricao-lote" autocomplete="off" placeholder="Ex: ANP - Aneis de Prata 925" required />
 
-            <div class="input-row">
+            <div class="preco-quantidade-grid">
               <label for="preco-lote">Preço
                 <div class="input-prefix-group">
                   <span class="input-prefix">R$</span>
@@ -776,12 +834,13 @@
                 </div>
               </label>
 
-              <label for="quantidade-preco">Quantidade</label>
-              <input type="number" id="quantidade-preco" name="quantidade-preco" min="1" step="1" value="1" />
-            </div>
+              <label for="quantidade-preco">Quantidade
+                <input type="number" id="quantidade-preco" name="quantidade-preco" min="1" step="1" value="1" />
+              </label>
 
-            <div class="actions" style="justify-content: flex-start;">
-              <button type="button" id="adicionar-preco" class="btn-green" aria-label="Adicionar preço ao lote">Adicionar preço</button>
+              <div class="preco-quantidade-action">
+                <button type="button" id="adicionar-preco" class="btn-green" aria-label="Adicionar preço ao lote">Adicionar preço</button>
+              </div>
             </div>
           </fieldset>
 
@@ -1019,28 +1078,40 @@
       const precoSpan = document.createElement('span');
       precoSpan.className = 'preco-prata';
       precoSpan.textContent = formatarPreco(preco);
-      const codigoSpan = document.createElement('span');
-      codigoSpan.className = 'codigo-prata';
-      codigoSpan.textContent = codigo;
-      const detalhes = [precoSpan, codigoSpan].filter((el) => el.textContent);
+      const detalhes = [precoSpan].filter((el) => el.textContent);
       detalhes.forEach((el) => linhaInferior.appendChild(el));
 
       frente.appendChild(descricaoFrente);
       frente.appendChild(linhaInferior);
 
       const verso = document.createElement('div');
-      verso.className = 'face verso';
+      verso.className = 'face verso verso-prata';
+
+      const versoConteudo = document.createElement('div');
+      versoConteudo.className = 'verso-prata-conteudo';
+
       const barcodeWrapper = document.createElement('div');
       barcodeWrapper.className = 'barcode-wrapper';
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       barcodeWrapper.appendChild(svg);
 
-      const fornecedorEl = document.createElement('div');
-      fornecedorEl.className = 'fornecedor';
-      fornecedorEl.textContent = fornecedor;
+      const infoVerso = document.createElement('div');
+      infoVerso.className = 'info-verso-prata';
+      const partesVerso = [fornecedor, descricao, codigo].filter(Boolean);
+      infoVerso.textContent = partesVerso.join(' - ');
 
-      verso.appendChild(barcodeWrapper);
-      verso.appendChild(fornecedorEl);
+      versoConteudo.appendChild(barcodeWrapper);
+      versoConteudo.appendChild(infoVerso);
+
+      verso.appendChild(versoConteudo);
+
+      const codigoCanto = (codigo || '').substring(0, 4);
+      if (codigoCanto) {
+        const codigoEl = document.createElement('div');
+        codigoEl.className = 'codigo-verso-prata';
+        codigoEl.textContent = codigoCanto;
+        verso.appendChild(codigoEl);
+      }
 
       const rabicho = document.createElement('div');
       rabicho.className = 'espaco rabicho';
@@ -1223,18 +1294,55 @@
 
         .linha-prata {
           align-items: flex-end;
+          justify-content: center;
+          gap: 8px;
         }
 
         .preco-prata {
           font-size: 17px;
           font-weight: 800;
           color: #0f172a;
+          text-align: center;
         }
 
-        .codigo-prata {
-          margin-left: auto;
-          font-size: 13px;
+        .verso-prata {
+          position: relative;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .verso-prata-conteudo {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          width: 100%;
+          text-align: center;
+        }
+
+        .info-verso-prata {
+          font-size: 11px;
+          font-weight: 700;
+          color: #0f172a;
+          line-height: 1.3;
+          padding: 0 8px;
+          word-break: break-word;
+        }
+
+        .codigo-verso-prata {
+          position: absolute;
+          right: 6px;
+          bottom: 4px;
+          font-size: 12px;
           font-weight: 800;
+          max-width: 60%;
+          text-align: right;
+          letter-spacing: 0.3px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         @page {
