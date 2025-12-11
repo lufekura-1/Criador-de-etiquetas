@@ -22,7 +22,7 @@
       --linha-font-size: 11px;
       --linha-gap: 6px;
       --fornecedor-font-size: 11px;
-      --barcode-height: 26px;
+      --barcode-height: 40px;
       --face-offset: 0px;
     }
 
@@ -959,7 +959,7 @@
       const numero = Number(peso.toString().replace(',', '.'));
       if (Number.isNaN(numero)) return peso;
 
-      return `${numero.toFixed(3).replace('.', ',')}g`;
+      return `${numero.toFixed(2).replace('.', ',')}g`;
     }
 
     function formatarPreco(preco) {
@@ -970,7 +970,9 @@
     }
 
       function alturaCodigoBarras() {
-        const altura = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--label-height')) * 7.2;
+        const altura = Number.parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue('--barcode-height'),
+        );
         return Number.isNaN(altura) ? 32 : altura;
       }
 
