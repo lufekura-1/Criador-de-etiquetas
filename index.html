@@ -1016,15 +1016,15 @@
         return Number.isNaN(altura) ? 32 : altura;
       }
 
-      function renderizarCodigoBarras(svg, codigo) {
+      function renderizarCodigoBarras(svg, codigo, opcoes = {}) {
         if (typeof JsBarcode === 'function') {
           JsBarcode(svg, codigo, {
             format: 'CODE128',
             displayValue: false,
             lineColor: '#111827',
-            width: 1.6,
+            width: opcoes.width ?? 1.6,
             height: alturaCodigoBarras(),
-            margin: 2,
+            margin: opcoes.margin ?? 2,
           });
           return;
         }
@@ -1099,7 +1099,7 @@
 
       lista.appendChild(etiqueta);
 
-      renderizarCodigoBarras(svg, codigo);
+      renderizarCodigoBarras(svg, codigo, { width: 2.1, margin: 6 });
     }
 
     function gerarEtiquetaPrata({ id, codigo, preco, descricao, fornecedor }, lista) {
@@ -1165,7 +1165,7 @@
 
       lista.appendChild(etiqueta);
 
-      renderizarCodigoBarras(svg, codigo);
+      renderizarCodigoBarras(svg, codigo, { width: 1.9, margin: 8 });
     }
 
     function imprimirEtiquetas(lista, dados) {
@@ -1667,7 +1667,7 @@
       if (!loteForm.reportValidity()) return;
       if (!precosLote.length) return;
 
-      const codigo = codigoFixoInput.value.trim();
+      const codigo = codigoFixoInput.value.trim().toUpperCase();
       const descricao = descricaoLoteInput.value.trim();
       const fornecedor = fornecedorPrataInput.value.trim();
 
@@ -1680,7 +1680,10 @@
           const id = labelIdCounterPrata++;
           const precoFormatado = formatarPreco(preco);
           labelsDataPrata.push({ id, codigo, preco: precoFormatado, descricao, fornecedor });
-          gerarEtiquetaPrata({ id, codigo, preco: precoFormatado, descricao, fornecedor }, labelsListPrata);
+          gerarEtiquetaPrata(
+            { id, codigo, preco: precoFormatado, descricao, fornecedor },
+            labelsListPrata,
+          );
         });
       });
 
