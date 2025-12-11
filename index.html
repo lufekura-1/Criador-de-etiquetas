@@ -368,7 +368,7 @@
     }
 
     .barcode-wrapper {
-      flex: 0 0 auto;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -403,15 +403,17 @@
 
     .badge {
       display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
       background: #ecfeff;
       color: #0f172a;
       border: 1px solid #67e8f9;
-      border-radius: 999px;
-      padding: 10px 16px;
+      border-radius: 14px;
+      padding: 12px 16px;
       font-weight: 700;
       box-shadow: 0 6px 18px rgba(8, 47, 73, 0.12);
+      min-width: 240px;
     }
 
     .badge small {
@@ -456,6 +458,7 @@
       text-align: center;
       font-size: 1.05rem;
       letter-spacing: 0.2px;
+      max-width: 160px;
     }
 
     .tabela-precos {
@@ -472,19 +475,26 @@
       border: 1px solid #e2e8f0;
       border-radius: 10px;
       padding: 8px 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
+      display: grid;
+      gap: 10px;
       background: #f8fafc;
     }
 
-    .preco-row-fields {
+    .preco-row-header,
+    .preco-row-body {
       display: flex;
-      gap: 10px;
       align-items: center;
-      flex: 1;
+      gap: 10px;
       flex-wrap: wrap;
+    }
+
+    .preco-row-header {
+      justify-content: space-between;
+    }
+
+    .preco-row-body {
+      justify-content: flex-start;
+      align-items: flex-end;
     }
 
     .preco-row label {
@@ -496,6 +506,7 @@
       display: flex;
       gap: 8px;
       align-items: center;
+      margin-left: auto;
     }
 
     .preco-inline {
@@ -503,6 +514,34 @@
       align-items: center;
       gap: 6px;
       min-width: 120px;
+    }
+
+    .preco-chip-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: #0f172a;
+      flex-wrap: wrap;
+    }
+
+    .preco-chip-title small {
+      font-size: 0.9rem;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .preco-chip-descricao {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0f172a;
+      word-break: break-word;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .preco-row-body .preco-inline strong {
+      color: #0f172a;
     }
 
     .preco-inline strong {
@@ -808,7 +847,7 @@
           <fieldset>
             <legend>Frente</legend>
             <label for="codigo-fixo">Código fixo</label>
-            <input type="text" id="codigo-fixo" name="codigo-fixo" class="codigo-fixo-input" autocomplete="off" placeholder="Digite o código do lote" required />
+            <input type="text" id="codigo-fixo" name="codigo-fixo" class="codigo-fixo-input" autocomplete="off" placeholder="Digite o código do lote" maxlength="5" required />
 
             <label for="descricao-lote">Descrição do lote</label>
             <input type="text" id="descricao-lote" name="descricao-lote" autocomplete="off" placeholder="Ex: ANP - Aneis de Prata 925" required />
@@ -1508,6 +1547,7 @@
     let precoIdCounter = 1;
 
     codigoFixoInput.addEventListener('input', renderTabelaPrecos);
+    descricaoLoteInput.addEventListener('input', renderTabelaPrecos);
 
     function renderTabelaPrecos() {
       listaPrecos.innerHTML = '';
@@ -1524,8 +1564,25 @@
         const row = document.createElement('div');
         row.className = 'preco-row';
 
-        const fields = document.createElement('div');
-        fields.className = 'preco-row-fields';
+        const header = document.createElement('div');
+        header.className = 'preco-row-header';
+
+        const codigoInfo = document.createElement('div');
+        codigoInfo.className = 'preco-chip-title';
+        const codigoLegenda = document.createElement('small');
+        codigoLegenda.textContent = 'Código fixo';
+        const codigoValor = document.createElement('strong');
+        codigoValor.textContent = codigoFixoInput.value || '-';
+        codigoInfo.append(codigoLegenda, codigoValor);
+
+        const descricaoInfo = document.createElement('div');
+        descricaoInfo.className = 'preco-chip-descricao';
+        descricaoInfo.textContent = descricaoLoteInput.value || 'Descrição não informada';
+
+        header.append(codigoInfo, descricaoInfo);
+
+        const body = document.createElement('div');
+        body.className = 'preco-row-body';
 
         const precoLabel = document.createElement('label');
         precoLabel.className = 'preco-inline';
@@ -1551,14 +1608,6 @@
         precoGroup.append(prefixo, precoInput);
         precoLabel.appendChild(precoGroup);
 
-        const codigoLabel = document.createElement('div');
-        codigoLabel.className = 'preco-inline';
-        const codigoTitulo = document.createElement('span');
-        codigoTitulo.textContent = 'Código';
-        const codigoValor = document.createElement('strong');
-        codigoValor.textContent = codigoFixoInput.value || '-';
-        codigoLabel.append(codigoTitulo, codigoValor);
-
         const quantidadeLabel = document.createElement('label');
         quantidadeLabel.className = 'preco-inline';
         quantidadeLabel.textContent = 'Qtd';
@@ -1575,7 +1624,7 @@
         });
         quantidadeLabel.appendChild(quantidadeInput);
 
-        fields.append(precoLabel, codigoLabel, quantidadeLabel);
+        body.append(precoLabel, quantidadeLabel);
 
         const actions = document.createElement('div');
         actions.className = 'preco-actions';
@@ -1592,7 +1641,8 @@
         });
         actions.appendChild(removerBtn);
 
-        row.append(fields, actions);
+        body.appendChild(actions);
+        row.append(header, body);
         listaPrecos.appendChild(row);
       });
     }
