@@ -969,13 +969,38 @@
       return `R$: ${numero.toFixed(2).replace('.', ',')}`;
     }
 
-    function alturaCodigoBarras() {
-      const altura = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--label-height')) * 7.2;
-      return Number.isNaN(altura) ? 32 : altura;
-    }
+      function alturaCodigoBarras() {
+        const altura = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--label-height')) * 7.2;
+        return Number.isNaN(altura) ? 32 : altura;
+      }
 
-    function gerarEtiquetaOuro({ id, codigo, peso, lojas, fornecedor }, lista) {
-      if (!codigo) return;
+      function renderizarCodigoBarras(svg, codigo) {
+        if (typeof JsBarcode === 'function') {
+          JsBarcode(svg, codigo, {
+            format: 'CODE128',
+            displayValue: false,
+            lineColor: '#111827',
+            width: 1.6,
+            height: alturaCodigoBarras(),
+            margin: 2,
+          });
+          return;
+        }
+
+        svg.innerHTML = '';
+        const textoFallback = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textoFallback.setAttribute('x', '50%');
+        textoFallback.setAttribute('y', '50%');
+        textoFallback.setAttribute('dominant-baseline', 'middle');
+        textoFallback.setAttribute('text-anchor', 'middle');
+        textoFallback.setAttribute('font-size', '12');
+        textoFallback.textContent = codigo;
+        svg.appendChild(textoFallback);
+        console.warn('JsBarcode não carregado. Renderizando texto simples como fallback.');
+      }
+
+      function gerarEtiquetaOuro({ id, codigo, peso, lojas, fornecedor }, lista) {
+        if (!codigo) return;
 
       const etiqueta = document.createElement('div');
       etiqueta.className = 'label-layout';
@@ -1032,14 +1057,7 @@
 
       lista.appendChild(etiqueta);
 
-      JsBarcode(svg, codigo, {
-        format: 'CODE128',
-        displayValue: false,
-        lineColor: '#111827',
-        width: 1.6,
-        height: alturaCodigoBarras(),
-        margin: 2,
-      });
+      renderizarCodigoBarras(svg, codigo);
     }
 
     function gerarEtiquetaPrata({ id, codigo, preco, descricao, fornecedor }, lista) {
@@ -1105,14 +1123,7 @@
 
       lista.appendChild(etiqueta);
 
-      JsBarcode(svg, codigo, {
-        format: 'CODE128',
-        displayValue: false,
-        lineColor: '#111827',
-        width: 1.6,
-        height: alturaCodigoBarras(),
-        margin: 2,
-      });
+      renderizarCodigoBarras(svg, codigo);
     }
 
     function imprimirEtiquetas(lista, dados) {
