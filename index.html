@@ -1019,7 +1019,7 @@
       function renderizarCodigoBarras(svg, codigo, opcoes = {}) {
         if (typeof JsBarcode === 'function') {
           JsBarcode(svg, codigo, {
-            format: 'CODE128',
+            format: opcoes.format ?? 'CODE128',
             displayValue: false,
             lineColor: '#111827',
             width: opcoes.width ?? 1.6,
@@ -1166,7 +1166,7 @@
 
       lista.appendChild(etiqueta);
 
-      renderizarCodigoBarras(svg, codigoBarras, { width: 1.9, margin: 8 });
+      renderizarCodigoBarras(svg, codigoBarras, { format: 'CODE39', width: 1.9, margin: 8 });
     }
 
     function imprimirEtiquetas(lista, dados) {
