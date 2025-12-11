@@ -604,9 +604,9 @@
     }
 
     .verso-prata .barcode-wrapper svg {
-      width: 96%;
-      height: 32px;
-      max-height: none;
+      width: 100%;
+      height: var(--barcode-height);
+      max-height: calc(var(--label-height) - (var(--face-padding) * 2) - 18px);
     }
 
     .info-verso-prata {
@@ -1209,7 +1209,7 @@
 
       lista.appendChild(etiqueta);
 
-      renderizarCodigoBarras(svg, codigoBarras, { format: 'CODE128', width: 2.1, height: 32, margin: 6 });
+      renderizarCodigoBarras(svg, codigoBarras, { format: 'CODE128', width: 2.1, margin: 6 });
     }
 
     function imprimirEtiquetas(lista, dados) {
@@ -1399,25 +1399,39 @@
         }
 
         .verso-prata .barcode-wrapper {
-          justify-content: flex-end;
-          padding-right: 6px;
+          justify-content: center;
+          padding: 0 4px;
         }
 
         .verso-prata .barcode-wrapper svg {
-          width: 88%;
-          height: 28px;
-          max-height: none;
+          width: 100%;
+          height: var(--barcode-height);
+          max-height: calc(var(--label-height) - (var(--face-padding) * 2) - 18px);
         }
 
         .info-verso-prata {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 10px;
           font-size: 12px;
           font-weight: 800;
           color: #0f172a;
           line-height: 1.35;
-          padding: 0 8px;
+          padding: 0 6px;
+          width: 100%;
           word-break: break-word;
+        }
+
+        .info-verso-prata .info-fornecedor-prata {
+          flex: 1;
           text-align: left;
-          align-self: flex-start;
+        }
+
+        .info-verso-prata .info-codigo-prata {
+          flex: 1;
+          text-align: right;
+          letter-spacing: 0.35px;
         }
 
 
